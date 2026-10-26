@@ -44,13 +44,20 @@ jobs:
         with:
           channel: stable
           cache: true
-      - name: Mobile — analyse, tests et build web
+      - name: Mobile — dépendances
         working-directory: mobile
-        run: |
-          flutter pub get
-          flutter analyze
-          flutter test
-          flutter build web --release --base-href $BASE/app/
+        run: flutter pub get
+      - name: Mobile — analyse
+        working-directory: mobile
+        run: flutter analyze
+      - name: Mobile — tests
+        # Lancés même si l'analyse échoue, pour voir tous les problèmes en une fois.
+        if: success() || failure()
+        working-directory: mobile
+        run: flutter test
+      - name: Mobile — build web
+        working-directory: mobile
+        run: flutter build web --release --base-href $BASE/app/
 
       - name: Assemblage du site
         run: |
@@ -63,7 +70,9 @@ jobs:
           path: _site
 
   deploy:
-    if: github.event_name != 'pull_request'
+    # Publication seulement pour un dépôt public (GitHub Pages gratuit). Dépôt privé : vérification seule,
+    # le site reste téléchargeable dans l'artefact « github-pages » du run.
+    if: github.event_name != 'pull_request' && !github.event.repository.private
     needs: build
     runs-on: ubuntu-latest
     environment:

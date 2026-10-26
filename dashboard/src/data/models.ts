@@ -79,6 +79,10 @@ export interface Signalement {
   position: PointSvg
   distanceUtilisateur?: string
   hauteurEau?: string
+  /** Tronçon de rue concerné (chemin SVG), surligné quand l'inondation est confirmée. */
+  svgTroncon?: string
+  /** Position du nom de la rue sur la carte. */
+  svgEtiquette?: PointSvg
   apresOui?: { statut: StatutSignalement; oui: number; non: number }
 }
 

@@ -52,6 +52,8 @@ interface SignalementJson {
   svg: { x: number; y: number }
   distanceUtilisateur?: string
   hauteurEau?: string
+  svgTroncon?: string
+  svgEtiquette?: { x: number; y: number }
   apresOui?: { statut: string; oui: number; non: number }
 }
 

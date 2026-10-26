@@ -29,11 +29,14 @@ class Signalement {
     required this.position,
     this.distanceUtilisateur,
     this.hauteurEau,
+    this.svgTroncon,
+    this.svgEtiquette,
     this.apresOui,
   });
 
   factory Signalement.fromJson(Map<String, dynamic> json) {
     final apresOui = json['apresOui'] as Map<String, dynamic>?;
+    final etiquette = json['svgEtiquette'] as Map<String, dynamic>?;
     return Signalement(
       id: json['id'] as String,
       zoneId: json['zone'] as String,
@@ -45,6 +48,8 @@ class Signalement {
       position: PointSvg.fromJson(json['svg'] as Map<String, dynamic>),
       distanceUtilisateur: json['distanceUtilisateur'] as String?,
       hauteurEau: json['hauteurEau'] as String?,
+      svgTroncon: json['svgTroncon'] as String?,
+      svgEtiquette: etiquette == null ? null : PointSvg.fromJson(etiquette),
       apresOui: apresOui == null
           ? null
           : (
@@ -69,6 +74,12 @@ class Signalement {
   final PointSvg position;
   final String? distanceUtilisateur;
   final String? hauteurEau;
+
+  /// Tronçon de rue concerné (chemin SVG), surligné sur la carte quand l'inondation est confirmée.
+  final String? svgTroncon;
+
+  /// Position du nom de la rue sur la carte.
+  final PointSvg? svgEtiquette;
   final VotesApresOui? apresOui;
 
   Signalement copyWith({StatutSignalement? statut, int? oui, int? non}) => Signalement(
@@ -82,6 +93,8 @@ class Signalement {
         position: position,
         distanceUtilisateur: distanceUtilisateur,
         hauteurEau: hauteurEau,
+        svgTroncon: svgTroncon,
+        svgEtiquette: svgEtiquette,
         apresOui: apresOui,
       );
 }

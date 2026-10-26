@@ -7,11 +7,13 @@ import 'package:hydrotic_ci/data/models/signalement.dart';
 import 'package:hydrotic_ci/data/models/sos.dart';
 import 'package:hydrotic_ci/data/models/utilisateur.dart';
 
+import '../support/file_asset_bundle.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late FixtureLoader fixtures;
 
-  setUp(() => fixtures = FixtureLoader());
+  setUp(() => fixtures = testFixtureLoader());
 
   test('zones', () async {
     final zones = await MockZoneRepository(fixtures).zones();
@@ -62,6 +64,12 @@ void main() {
         [StatutSos.recu, StatutSos.recu, StatutSos.enRoute, StatutSos.secouru]);
     expect(StatutSos.recu.suivant, StatutSos.enRoute);
     expect(StatutSos.secouru.suivant, StatutSos.secouru);
+  });
+
+  test('typographie française des fixtures', () async {
+    final modeles = await MockAlertRepository(fixtures).modeles();
+    expect(modeles['confirmation'], contains('inondée\u00A0?'));
+    expect(typographieFr('« oui » : 8 %'), '«\u00A0oui\u00A0»\u00A0: 8\u00A0%');
   });
 
   test('utilisateurs', () async {
