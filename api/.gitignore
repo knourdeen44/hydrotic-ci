@@ -1,0 +1,9 @@
+.vercel
+.env*
+.venv/
+__pycache__/
+.pytest_cache/
+# Outillage local (skills d’agent installés par les intégrations Vercel)
+.agents/
+.claude/
+skills-lock.json

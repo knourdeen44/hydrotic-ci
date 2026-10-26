@@ -131,6 +131,31 @@ jobs:
         with:
           path: _site
 
+  # API (FastAPI) : tests sur une base PostGIS jetable, jamais sur Neon.
+  api:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: api
+    services:
+      postgis:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: hydrotic_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: API — dépendances
+        run: uv sync --frozen
+      - name: API — tests
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:test@localhost:5432/hydrotic_test
+        run: uv run pytest -q
+
   deploy:
     # Publication seulement pour un dépôt public (GitHub Pages gratuit). Dépôt privé : vérification seule,
     # le site reste téléchargeable dans l'artefact « github-pages » du run.
