@@ -62,15 +62,17 @@ void main() {
     testWidgets("hauteur d'eau obligatoire, puis envoi vers la carte", (tester) async {
       await pumpApp(tester, '/signaler');
       expect(find.text(Fr.signalerInondation), findsOneWidget);
-      await tester.scrollUntilVisible(find.text(Fr.envoyerSignalement), 200);
+      // Liste principale (le champ commentaire multiligne a son propre défilement).
+      final liste = find.byType(Scrollable).first;
+      await tester.scrollUntilVisible(find.text(Fr.envoyerSignalement), 200, scrollable: liste);
       await tester.tap(find.text(Fr.envoyerSignalement));
       await tester.pumpAndSettle();
       expect(find.text(Fr.signalerInondation), findsOneWidget);
 
-      await tester.scrollUntilVisible(find.text('Genou'), -200);
+      await tester.scrollUntilVisible(find.text('Genou'), -200, scrollable: liste);
       await tester.tap(find.text('Genou'));
       await tester.pump();
-      await tester.scrollUntilVisible(find.text(Fr.envoyerSignalement), 200);
+      await tester.scrollUntilVisible(find.text(Fr.envoyerSignalement), 200, scrollable: liste);
       await tester.tap(find.text(Fr.envoyerSignalement));
       await tester.pumpAndSettle();
       expect(find.text(Fr.merciVoisins), findsOneWidget);
