@@ -75,7 +75,7 @@ void main() {
     await avancer(tester, const Duration(milliseconds: 1500));
     await tester.tap(find.text(Fr.navAccueil));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(Fr.navCarte));
+    await tester.tap(find.text(Fr.navCarte).last); // onglet (aussi présent dans l'accès rapide)
     await tester.pumpAndSettle();
     // Réponse déjà donnée : plus de question.
     expect(find.text(Fr.questionRue('Rue Ministre')), findsNothing);
@@ -85,7 +85,7 @@ void main() {
     await ouvrirMenuDemo(tester);
     await tester.tap(find.text(Fr.reinitialiser));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(Fr.navCarte));
+    await tester.tap(find.text(Fr.navCarte).last); // onglet (aussi présent dans l'accès rapide)
     await tester.pumpAndSettle();
     expect(find.text(Fr.questionRue('Rue Ministre')), findsOneWidget);
   });
