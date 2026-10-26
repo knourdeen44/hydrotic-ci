@@ -53,6 +53,9 @@ Future<void> showDemoMenu(BuildContext context) {
   ];
   return showModalBottomSheet<void>(
     context: context,
+    // Hauteur du contenu (la limite par défaut, 9/16 de l'écran, coupe le menu).
+    isScrollControlled: true,
+    useSafeArea: true,
     backgroundColor: Colors.transparent,
     elevation: 0,
     builder: (menu) => HydroticSheet(
