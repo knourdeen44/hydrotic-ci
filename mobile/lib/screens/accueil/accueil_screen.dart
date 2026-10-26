@@ -19,6 +19,7 @@ import '../../widgets/rain_bars.dart';
 import '../../widgets/risk_card.dart';
 import '../../widgets/section_title.dart';
 import '../shell/citizen_scaffold.dart';
+import '../demo/demo_menu.dart';
 import '../shell/consignes_overlay.dart';
 import 'accueil_data.dart';
 
@@ -135,6 +136,7 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
           quartier: d.quartier,
           nbZones: d.zonesSuivies.length,
           onZonesTap: () => _zoneSuivante(d),
+          onLogoLongPress: () => showDemoMenu(context),
         ),
         Expanded(
           child: SingleChildScrollView(

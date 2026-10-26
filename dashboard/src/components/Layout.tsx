@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import DemoMenu from './DemoMenu'
 import styles from './Layout.module.css'
 import Sidebar from './Sidebar'
 
@@ -10,6 +11,7 @@ export default function Layout() {
       <main className={styles.main}>
         <Outlet />
       </main>
+      <DemoMenu />
     </div>
   )
 }

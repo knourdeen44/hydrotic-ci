@@ -5,15 +5,19 @@ import 'screens/accueil/accueil_screen.dart';
 import 'screens/alertes/alertes_screen.dart';
 import 'screens/carte/carte_screen.dart';
 import 'screens/demarrage/demarrage_screen.dart';
+import 'screens/demo/ecran_verrouille_screen.dart';
 import 'screens/dev/catalog_screen.dart';
 import 'screens/dev/theme_preview_screen.dart';
 import 'screens/profil/profil_screen.dart';
 import 'screens/signaler/signaler_screen.dart';
 import 'screens/sos/sos_screen.dart';
 
-/// Scénario de démonstration demandé dans l'adresse (`?demo=alerte|confirmation|sos`).
-/// Le menu caché du mode démo (étape 7) utilisera ces mêmes adresses.
+/// Scénario de démonstration demandé dans l'adresse (`?demo=alerte|confirmation|sos`),
+/// lancé depuis le menu caché du mode démo.
 String? _demo(GoRouterState state) => state.uri.queryParameters['demo'];
+
+/// Clé liée à l'adresse complète : relancer un scénario recrée l'écran (le menu ajoute `&n=…`).
+Key _cle(GoRouterState state) => ValueKey(state.uri.toString());
 
 /// Onglets : pas d'animation de transition entre écrans principaux.
 Page<void> _onglet(GoRouterState state, Widget child) => NoTransitionPage(key: state.pageKey, child: child);
@@ -25,12 +29,12 @@ GoRouter createRouter({String initialLocation = '/demarrage'}) => GoRouter(
         GoRoute(
           path: '/',
           pageBuilder: (context, state) =>
-              _onglet(state, AccueilScreen(scenarioAlerte: _demo(state) == 'alerte')),
+              _onglet(state, AccueilScreen(key: _cle(state), scenarioAlerte: _demo(state) == 'alerte')),
         ),
         GoRoute(
           path: '/carte',
           pageBuilder: (context, state) =>
-              _onglet(state, CarteScreen(scenario: _demo(state) == 'confirmation')),
+              _onglet(state, CarteScreen(key: _cle(state), scenario: _demo(state) == 'confirmation')),
         ),
         GoRoute(
           path: '/alertes',
@@ -51,8 +55,9 @@ GoRouter createRouter({String initialLocation = '/demarrage'}) => GoRouter(
         ),
         GoRoute(
           path: '/sos',
-          builder: (context, state) => SosScreen(scenario: _demo(state) == 'sos'),
+          builder: (context, state) => SosScreen(key: _cle(state), scenario: _demo(state) == 'sos'),
         ),
+        GoRoute(path: '/demo/verrouille', builder: (context, state) => const EcranVerrouilleScreen()),
         GoRoute(path: '/dev/catalogue', builder: (context, state) => const CatalogScreen()),
         GoRoute(path: '/dev/theme', builder: (context, state) => const ThemePreviewScreen()),
       ],

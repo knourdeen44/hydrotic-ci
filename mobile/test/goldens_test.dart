@@ -79,7 +79,7 @@ bool _absente(String nom) => !autoUpdateGoldenFiles && !File('test/goldens/$nom.
 void main() {
   setUpAll(_chargerPolices);
 
-  // Écrans sans maquette (M0, M5 à M7) : captures de non-régression.
+  // Écrans sans maquette de référence dédiée (M0, M5 à M7, aperçu verrouillé) : non-régression.
   for (final (nom, location) in [
     ('m0_bienvenue', '/demarrage'),
     ('m0_quartiers', '/demarrage?etape=quartiers'),
@@ -87,6 +87,7 @@ void main() {
     ('m5_alertes', '/alertes'),
     ('m6_profil', '/profil'),
     ('m7_signaler', '/signaler'),
+    ('m2_ecran_verrouille', '/demo/verrouille'),
   ]) {
     testWidgets(nom, (tester) => _capture(tester, nom, location), skip: _absente(nom));
   }

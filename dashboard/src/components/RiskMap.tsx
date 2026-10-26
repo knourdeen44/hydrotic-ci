@@ -32,9 +32,12 @@ export default function RiskMap({
   sos,
   signalements = [],
   legende = true,
+  nouveau,
 }: {
   zones: ZoneCarte[]
   sos: PointSvg[]
+  /** SOS qui vient d'arriver : apparition (« pop ») et deux pulsations. */
+  nouveau?: PointSvg
   signalements?: PointSvg[]
   legende?: boolean
 }) {
@@ -66,8 +69,27 @@ export default function RiskMap({
             </g>
           )
         })}
+        {nouveau &&
+          // Deux pulsations successives (départ à 0 s puis 1,2 s).
+          [0, 1.2].map((delai) => (
+            <circle
+              key={delai}
+              cx={nouveau.x}
+              cy={nouveau.y}
+              r={11}
+              className={styles.pulse}
+              style={{ animationDelay: `${delai}s` }}
+            />
+          ))}
         {sos.map((p) => (
-          <circle key={`s-${p.x}-${p.y}`} cx={p.x} cy={p.y} r={11} strokeWidth={3} className={styles.sos} />
+          <circle
+            key={`s-${p.x}-${p.y}`}
+            cx={p.x}
+            cy={p.y}
+            r={11}
+            strokeWidth={3}
+            className={`${styles.sos} ${p === nouveau ? styles.pop : ''}`}
+          />
         ))}
         {signalements.map((p) => (
           <rect

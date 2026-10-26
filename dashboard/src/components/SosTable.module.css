@@ -1,0 +1,22 @@
+/* Mode démo : arrivée d'un SOS (prototype : rowIn 2,5 s). */
+.nouveau {
+  animation: arrivee 2.5s ease;
+}
+
+@keyframes arrivee {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+    background: var(--color-status-recu-bg);
+  }
+  40% {
+    opacity: 1;
+    transform: none;
+    background: var(--color-status-recu-bg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    background: transparent;
+  }
+}

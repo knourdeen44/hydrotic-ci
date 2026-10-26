@@ -11,6 +11,8 @@ import '../../widgets/check_card.dart';
 import '../../widgets/hydrotic_button.dart';
 import '../../widgets/hydrotic_text_field.dart';
 import '../../widgets/sos_fab.dart';
+import '../../widgets/long_press_1s.dart';
+import '../demo/demo_menu.dart';
 import 'demarrage_etape.dart';
 
 /// Étapes du démarrage (M0).
@@ -122,7 +124,10 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
       padding: const EdgeInsets.fromLTRB(24, 48, 24, HydroticSizes.sosFab + 32),
       child: Column(
         children: [
-          Image.asset('assets/images/logo_hydrotic_full.png', width: 160, semanticLabel: Fr.nomApp),
+          LongPress1s(
+            onLongPress: () => showDemoMenu(context),
+            child: Image.asset('assets/images/logo_hydrotic_full.png', width: 160, semanticLabel: Fr.nomApp),
+          ),
           const SizedBox(height: HydroticSpacing.dashGap),
           Text(Fr.nomApp, style: HydroticText.riskTitle.copyWith(color: HydroticColors.gray)),
           const SizedBox(height: 6),

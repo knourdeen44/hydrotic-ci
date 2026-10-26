@@ -4,6 +4,7 @@ import '../l10n/fr.dart';
 import '../theme/hydrotic_colors.dart';
 import '../theme/hydrotic_sizes.dart';
 import '../theme/hydrotic_text.dart';
+import 'long_press_1s.dart';
 
 /// En-tête de l'accueil (prototype : `.top`).
 class HydroticHeader extends StatelessWidget {
@@ -23,7 +24,7 @@ class HydroticHeader extends StatelessWidget {
   /// Appui sur la puce « 2 zones » : sélecteur de zone.
   final VoidCallback? onZonesTap;
 
-  /// Appui long sur le logo : menu du mode démo.
+  /// Appui long (1 s) sur le logo : menu du mode démo.
   final VoidCallback? onLogoLongPress;
 
   @override
@@ -42,7 +43,7 @@ class HydroticHeader extends StatelessWidget {
         height: HydroticSizes.touchTarget,
         child: Row(
           children: [
-            GestureDetector(
+            LongPress1s(
               onLongPress: onLogoLongPress,
               child: Image.asset(
                 'assets/images/logo_hydrotic_icon.png',

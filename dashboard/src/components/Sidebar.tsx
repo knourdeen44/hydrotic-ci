@@ -12,7 +12,7 @@ const cheminMenu = (id: string) => (id === 'overview' ? '/' : `/${id}`)
 /** Barre latérale : logo, menu avec badges, mention « données fictives » en pied. */
 export default function Sidebar() {
   const menu = useDonnees(() => repositories.dashboard.menu())
-  const { alerteValidee } = useEtat()
+  const { alerteValidee, sos } = useEtat()
   return (
     <nav className={styles.side} aria-label="Menu principal">
       <div className={styles.brand}>
@@ -24,7 +24,9 @@ export default function Sidebar() {
       </div>
       {menu?.map((entree) => {
         // L'alerte en attente validée ne compte plus dans le badge « Alertes ».
-        const badge = entree.id === 'alertes' && alerteValidee ? undefined : entree.badge
+        let badge = entree.id === 'alertes' && alerteValidee ? undefined : entree.badge
+        // Badge « SOS victimes » : nombre de SOS reçus (suit le mode démo).
+        if (entree.id === 'sos' && sos) badge = sos.length
         return (
           <NavLink
             key={entree.id}

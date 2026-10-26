@@ -56,3 +56,43 @@
 .dotOrange {
   background: color-mix(in srgb, var(--color-risk-orange) 40%, transparent);
 }
+
+/* Mode démo : arrivée d'un SOS (prototype : pop 0,4 s, pulsations 1,2 s à 0 s et 1,2 s). */
+.pop,
+.pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pop {
+  animation: pop 0.4s ease;
+}
+
+.pulse {
+  fill: color-mix(in srgb, var(--color-risk-rouge) 50%, transparent);
+  opacity: 0;
+  animation: pulse 1.2s ease-out both;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}

@@ -14,7 +14,18 @@ export const fr = {
   bientot: 'Disponible dans une prochaine version',
   alerteManuelle: '+ Alerte manuelle',
 
+  // Mode démo (Ctrl + D)
+  modeDemoTitre: 'Mode démonstration',
+  scenario1: 'Scénario 1 — Alerte la veille',
+  scenario2: 'Scénario 2 — Confirmation rue Ministre',
+  scenario3: 'Scénario 3 — SOS',
+  scenario4: 'Scénario 4 — Tableau de bord',
+  reinitialiser: 'Réinitialiser les données',
+  applicationMobile: 'application mobile ↗',
+
   // D1 — Vue d'ensemble
+  /** Libellé de l'indicateur recalculé depuis la liste des SOS (`dashboard.json > kpis`). */
+  kpiSosActifs: 'SOS actifs',
   carteTitre: 'Carte des risques, signalements et victimes',
   schemaIllustratif: 'Schéma illustratif',
   legendeVictime: 'Victime (SOS)',

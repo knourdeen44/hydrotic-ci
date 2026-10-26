@@ -136,6 +136,18 @@ abstract final class Fr {
       'Uniquement pour signaler, confirmer une inondation ou envoyer un SOS.';
   static const commencer = 'Commencer';
 
+  // Mode démo (menu caché : appui long sur le logo)
+  static const modeDemoTitre = 'Mode démonstration';
+  static const scenario1 = 'Scénario 1 — Alerte la veille';
+  static const scenario2 = 'Scénario 2 — Confirmation rue Ministre';
+  static const scenario3 = 'Scénario 3 — SOS';
+  static const scenario4 = 'Scénario 4 — Tableau de bord';
+  static const reinitialiser = 'Réinitialiser les données';
+  static const apercuVerrouille = 'Aperçu écran verrouillé';
+  static const scenario4Mobile = 'Scénario 4$nbsp: à lancer depuis le tableau de bord (Ctrl + D)';
+  static const jeSuisEnDanger = 'Je suis en danger';
+  static String ilYAHeures(int h) => 'il y a $h${nbsp}h';
+
   // Actions non branchées
   static const bientot = 'Disponible dans une prochaine version';
 
