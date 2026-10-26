@@ -47,6 +47,18 @@ void main() {
     expect(find.text(Fr.queFaireAvantDemain), findsOneWidget);
   });
 
+  testWidgets('M3 — scénario confirmation : pop 1 s, feuille 2 s, « Oui » 4,55 s, merci, zone rouge', (tester) async {
+    await pumpApp(tester, '/carte?demo=confirmation');
+    expect(find.text(Fr.questionRue('Rue Ministre')), findsNothing);
+    await avancer(tester, const Duration(milliseconds: 2700));
+    expect(find.text(Fr.questionRue('Rue Ministre')), findsOneWidget);
+    await avancer(tester, const Duration(milliseconds: 2500));
+    expect(find.text(Fr.merci), findsOneWidget);
+    expect(find.text(Fr.votes(8, 1)), findsOneWidget);
+    await avancer(tester, const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+  });
+
   group('M3 — Carte', () {
     testWidgets('« Oui » affiche le merci et met à jour les votes', (tester) async {
       await pumpApp(tester, '/carte');

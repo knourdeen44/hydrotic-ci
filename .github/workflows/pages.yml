@@ -36,8 +36,13 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: dashboard/package-lock.json
-      - name: Tokens — fichiers générés à jour
-        run: node tools/gen_tokens.mjs --check
+      - name: Comparaison des captures aux maquettes (écart de position ≤ 4 px)
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 tools/comparer_maquettes.py >> "$GITHUB_STEP_SUMMARY"
+          python3 tools/comparer_maquettes.py
+      - name: Critères d'acceptation vérifiables sans exécution (couleurs, réseau, textes, routes…)
+        run: node tools/verifier.mjs >> "$GITHUB_STEP_SUMMARY" && node tools/verifier.mjs
       - name: Tableau de bord — lint et build
         working-directory: dashboard
         run: |
@@ -106,7 +111,8 @@ jobs:
           if-no-files-found: ignore
       - name: Mobile — build web
         working-directory: mobile
-        run: flutter build web --release --base-href $BASE/app/
+        # CanvasKit servi avec l'application (sinon chargé depuis www.gstatic.com).
+        run: flutter build web --release --no-web-resources-cdn --base-href $BASE/app/
 
       - name: Assemblage du site
         run: |
@@ -114,6 +120,12 @@ jobs:
           cp site/index.html _site/
           cp -R mobile/build/web _site/app
           cp -R dashboard/dist _site/dashboard
+      - name: Site — aucun appel réseau externe (application et tableau de bord compilés)
+        run: |
+          mkdir -p /tmp/srv && ln -s "$PWD/_site" /tmp/srv${BASE}
+          (cd /tmp/srv && python3 -m http.server 8080 >/dev/null 2>&1 &)
+          sleep 2
+          node tools/verifier_web.mjs http://127.0.0.1:8080${BASE}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

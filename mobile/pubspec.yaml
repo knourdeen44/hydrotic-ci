@@ -35,3 +35,11 @@ flutter:
           weight: 700
         - asset: assets/fonts/Inter-ExtraBold.ttf
           weight: 800
+    # Police par défaut du moteur web : déclarée localement (Inter), sinon téléchargée
+    # depuis fonts.gstatic.com au démarrage (aucun appel réseau en phase 1).
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

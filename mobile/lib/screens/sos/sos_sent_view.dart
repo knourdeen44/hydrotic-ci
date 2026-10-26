@@ -11,6 +11,9 @@ import '../../widgets/sos_status_timeline.dart';
 class SosSentView extends StatelessWidget {
   const SosSentView({super.key, required this.etapes, required this.afficherInfo});
 
+  static const double _margeTextes = 10;
+  static const double _margeBlocs = HydroticSpacing.sheetPadding - _margeTextes;
+
   final List<EtapeSos> etapes;
 
   /// Bloc « Les secours sont informés » (apparaît après la prise en charge).
@@ -21,7 +24,10 @@ class SosSentView extends StatelessWidget {
     return ColoredBox(
       color: HydroticColors.white,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(HydroticSpacing.sheetPadding),
+        // Marge du prototype : 18 px. Les textes centrés disposent de 8 px de plus de chaque côté :
+        // Flutter rend l'Inter en 12 px ≈ 4 % plus large que le navigateur, et la phrase
+        // « Restez en hauteur… » passerait sinon sur deux lignes (une seule dans la maquette).
+        padding: const EdgeInsets.symmetric(vertical: HydroticSpacing.sheetPadding, horizontal: _margeTextes),
         child: Column(
           children: [
             const SizedBox(height: 28),
@@ -46,38 +52,44 @@ class SosSentView extends StatelessWidget {
               style: HydroticText.caption.copyWith(color: HydroticColors.grayLight),
             ),
             const SizedBox(height: 18),
-            SosStatusTimeline(etapes: etapes),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: _margeBlocs),
+              child: SosStatusTimeline(etapes: etapes),
+            ),
             const SizedBox(height: 16),
-            AnimatedOpacity(
-              opacity: afficherInfo ? 1 : 0,
-              duration: const Duration(milliseconds: 400),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-                decoration: BoxDecoration(
-                  color: HydroticColors.slateXLight,
-                  borderRadius: BorderRadius.circular(HydroticRadius.chip),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      Fr.secoursInformes,
-                      style: HydroticText.button.copyWith(
-                        color: HydroticColors.slateDark,
-                        fontWeight: FontWeight.w800,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: _margeBlocs),
+              child: AnimatedOpacity(
+                opacity: afficherInfo ? 1 : 0,
+                duration: const Duration(milliseconds: 400),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: HydroticColors.slateXLight,
+                    borderRadius: BorderRadius.circular(HydroticRadius.chip),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Fr.secoursInformes,
+                        style: HydroticText.button.copyWith(
+                          color: HydroticColors.slateDark,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      Fr.positionMiseAJour,
-                      style: HydroticText.caption.copyWith(
-                        color: HydroticColors.gray,
-                        fontSize: 12.5,
-                        height: 1.4,
+                      const SizedBox(height: 3),
+                      Text(
+                        Fr.positionMiseAJour,
+                        style: HydroticText.caption.copyWith(
+                          color: HydroticColors.gray,
+                          fontSize: 12.5,
+                          height: 1.4,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -94,6 +94,11 @@ void main() {
 
   testWidgets('M1 accueil', (tester) => _capture(tester, 'm1_accueil', '/'));
 
+  // Début du scénario 1 (vidéo v1_alerte) : carte jaune, avant la bannière.
+  testWidgets('M1 accueil (début du scénario alerte)',
+      (tester) => _capture(tester, 'm1_alerte_debut', '/?demo=alerte'),
+      skip: _absente('m1_alerte_debut'));
+
   testWidgets('M2 alerte (fin)', (tester) => _capture(
         tester,
         'm2_alerte_fin',
