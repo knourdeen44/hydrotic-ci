@@ -1,0 +1,19 @@
+{
+  "_note": "Données fictives. niveaux possibles : vert | jaune | orange | rouge. Pluie en mm (fictive) ; les deux dernières valeurs sont des prévisions (barres hachurées).",
+  "niveaux": {
+    "vert":   { "label": "Normal",       "titre": "Situation normale", "message": "Aucune alerte en cours." },
+    "jaune":  { "label": "Vigilance",    "titre": "Vigilance",         "message": "Pluies modérées prévues. Restez informé." },
+    "orange": { "label": "Risque élevé", "titre": "Risque élevé",      "message": "Fortes pluies prévues. Évitez les zones basses et préparez vos documents importants." },
+    "rouge":  { "label": "Danger",       "titre": "Danger imminent",   "message": "Mettez-vous en sécurité et suivez les consignes officielles. En danger ? Appuyez sur SOS." }
+  },
+  "parZone": {
+    "treichville": { "aujourdhui": "jaune", "demain": "orange", "signalementsConfirmes": 3, "majIl": "2 min" },
+    "palmeraie":   { "aujourdhui": "orange", "demain": "rouge",  "signalementsConfirmes": 8, "majIl": "2 min" }
+  },
+  "pluie": { "labels": ["J-4", "J-3", "J-2", "J-1", "Auj.", "J+1", "J+2"], "mm": [5, 10, 6, 13, 8, 25, 17], "prevision": [false, false, false, false, false, true, true] },
+  "consignes": {
+    "orange": ["Mettez documents, médicaments et chargeur en hauteur.", "Évitez les zones basses et les caniveaux, ne traversez pas l'eau.", "En danger ? Maintenez le bouton SOS 3 secondes."],
+    "rouge":  ["Rejoignez un étage ou un lieu en hauteur.", "Coupez l'électricité si l'eau entre chez vous.", "En danger ? Maintenez le bouton SOS 3 secondes."],
+    "jaune":  ["Suivez l'évolution dans l'application.", "Vérifiez que les caniveaux devant chez vous ne sont pas bouchés."]
+  }
+}

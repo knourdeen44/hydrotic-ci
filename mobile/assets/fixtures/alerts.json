@@ -1,0 +1,15 @@
+{
+  "_note": "Données fictives. Modèles de messages repris du cahier des charges (section 11.5).",
+  "modeles": {
+    "orange": "Hydrotic CI : risque élevé d'inondation demain dans [quartier]. Évitez les zones basses et suivez les consignes des autorités.",
+    "rouge": "ALERTE Hydrotic CI : danger d'inondation imminent dans [quartier]. Mettez-vous en sécurité. En danger ? Appuyez sur SOS.",
+    "confirmation": "La rue [nom] est-elle toujours inondée ? Votre réponse aide vos voisins.",
+    "sosRecu": "Votre position a été transmise aux secours. Restez en hauteur et gardez votre téléphone allumé.",
+    "finAlerte": "Hydrotic CI : le risque d'inondation est revenu à un niveau normal dans [quartier]."
+  },
+  "alertes": [
+    { "id": "al-1", "zone": "treichville", "niveau": "orange", "titre": "ALERTE ORANGE — Treichville", "corps": "Risque élevé d'inondation demain. Évitez les zones basses et suivez les consignes des autorités.", "statut": "ENVOYEE", "date": "Mercredi 17 juin · 18:42", "source": "Modèle Hydrotic" },
+    { "id": "al-2", "zone": "palmeraie", "niveau": "rouge", "titre": "ALERTE ROUGE — Riviera Palmeraie", "corps": "Danger d'inondation imminent rue Ministre et zone 5. Mettez-vous en sécurité et suivez les consignes officielles.", "statut": "EN_ATTENTE", "probabilite": 0.82, "signalementsConfirmes": 7, "date": "Mercredi 17 juin · 05:17", "source": "Modèle Hydrotic" },
+    { "id": "al-3", "zone": "treichville", "niveau": "jaune", "titre": "Vigilance jaune — Treichville", "corps": "Vigilance jaune pour demain à Treichville.", "statut": "ENVOYEE", "date": "Mardi 16 juin · 23:10", "source": "Modèle Hydrotic" }
+  ]
+}

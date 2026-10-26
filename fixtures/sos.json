@@ -1,0 +1,11 @@
+{
+  "_note": "Données fictives. Statuts : RECU | EN_ROUTE | SECOURU.",
+  "sosCourant": { "position": "Treichville, avenue 21", "precisionM": 12, "personnes": 3, "blesses": false, "hauteurEau": "Genou", "enfantsOuAges": true,
+    "timeline": [ { "etape": "Reçu par les secours", "detail": "17:12 · position ± 12 m transmise", "fait": true }, { "etape": "Équipe en route", "detail": "17:14 · ONPC — Lieutenant Traoré", "fait": true }, { "etape": "Secouru", "detail": "", "fait": false } ] },
+  "liste": [
+    { "heure": "17:12", "lieu": "Treichville, av. 21", "personnes": 3, "details": "Enfants, genou", "statut": "RECU", "svgDashboard": { "x": 150, "y": 430 } },
+    { "heure": "17:08", "lieu": "Palmeraie, zone 5", "personnes": 2, "details": "Blessé", "statut": "RECU", "svgDashboard": { "x": 520, "y": 160 } },
+    { "heure": "16:57", "lieu": "Rue Ministre", "personnes": 5, "details": "Taille", "statut": "EN_ROUTE", "svgDashboard": { "x": 470, "y": 190 } },
+    { "heure": "16:41", "lieu": "Palmeraie", "personnes": 1, "details": "Âgé", "statut": "SECOURU", "svgDashboard": { "x": 585, "y": 110 } }
+  ]
+}

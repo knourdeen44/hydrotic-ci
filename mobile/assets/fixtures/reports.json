@@ -1,0 +1,9 @@
+{
+  "_note": "Données fictives. Positions = coordonnées SVG de la carte schématique mobile (viewBox 0 0 340 700).",
+  "signalements": [
+    { "id": "sg-1", "zone": "palmeraie", "rue": "Rue Ministre", "statut": "A_CONFIRMER", "oui": 7, "non": 1, "il": "38 min", "distanceUtilisateur": "140 m", "hauteurEau": "Genou", "svg": { "x": 160, "y": 278 }, "apresOui": { "statut": "CONFIRME", "oui": 8, "non": 1 } },
+    { "id": "sg-2", "zone": "treichville", "rue": "Avenue 21", "statut": "CONFIRME", "oui": 5, "non": 0, "il": "1 h", "svg": { "x": 90, "y": 320 } },
+    { "id": "sg-3", "zone": "palmeraie", "rue": "Zone 5", "statut": "CONFIRME", "oui": 4, "non": 1, "il": "52 min", "svg": { "x": 230, "y": 290 } }
+  ],
+  "utilisateur": { "svg": { "x": 200, "y": 350 } }
+}

@@ -1,0 +1,16 @@
+{
+  "_note": "Données fictives de la vue d'ensemble.",
+  "entete": { "titre": "Vue d'ensemble", "sousTitre": "Mercredi 17 juin · mise à jour il y a 2 min · Agent : ONPC Abidjan Sud" },
+  "kpis": [
+    { "libelle": "Zones en alerte", "valeur": "2 / 2", "detail": "1 rouge · 1 orange" },
+    { "libelle": "SOS actifs", "valeur": "4", "detail": "2 non pris en charge" },
+    { "libelle": "Signalements confirmés", "valeur": "11", "detail": "sur 17 reçus (2 h)" },
+    { "libelle": "Alertes délivrées", "valeur": "86 %", "detail": "push + e-mail, zone rouge" }
+  ],
+  "menu": [
+    { "id": "overview", "libelle": "Vue d'ensemble" }, { "id": "alertes", "libelle": "Alertes", "badge": 1 }, { "id": "sos", "libelle": "SOS victimes", "badge": 4 },
+    { "id": "signalements", "libelle": "Signalements" }, { "id": "previsions", "libelle": "Prévisions" }, { "id": "historique", "libelle": "Historique & export" },
+    { "id": "zones", "libelle": "Zones et seuils" }, { "id": "supervision", "libelle": "Supervision" }
+  ],
+  "signalementsCarte": [ { "x": 545, "y": 185 }, { "x": 430, "y": 80 }, { "x": 200, "y": 370 }, { "x": 110, "y": 360 } ]
+}

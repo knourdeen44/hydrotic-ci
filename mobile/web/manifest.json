@@ -1,0 +1,12 @@
+{
+  "name": "Hydrotic CI",
+  "short_name": "Hydrotic CI",
+  "start_url": ".",
+  "display": "standalone",
+  "description": "Prévoir, alerter et secourir face aux inondations",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icons/Icon-192.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}

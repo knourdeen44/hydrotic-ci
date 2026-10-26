@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+:root{--slate:#6C809A;--slate-d:#55667D;--slate-l:#E1E6EC;--slate-xl:#F3F5F8;--gray:#464A4F;--gray-l:#8A9097;--deep:#1B3A60;--vert:#3F8F5B;--jaune:#D9A520;--orange:#D9731E;--rouge:#C0392B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;width:1440px;height:880px;display:flex;color:var(--gray);background:var(--slate-xl)}
+.side{width:230px;background:var(--gray);color:#DADDE1;padding:22px 16px;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.brand img{width:38px;height:38px;background:#fff;border-radius:10px;padding:3px}
+.brand b{color:#fff;font-size:16px}.brand small{display:block;font-size:11px;color:#AEB4BA}
+.it{padding:10px 12px;border-radius:10px;font-size:13px;display:flex;justify-content:space-between}
+.it.on{background:var(--slate);color:#fff;font-weight:600}
+.badge{background:var(--rouge);color:#fff;border-radius:10px;font-size:11px;padding:1px 7px;font-weight:700}
+.main{flex:1;padding:22px 26px;display:flex;flex-direction:column;gap:16px}
+.hd{display:flex;align-items:center;justify-content:space-between}
+.hd h1{font-size:22px;font-weight:800}.hd p{font-size:12px;color:var(--gray-l)}
+.btn{background:var(--slate);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:#fff;border-radius:14px;padding:14px 16px;border:1px solid var(--slate-l)}
+.kpi .k{font-size:12px;color:var(--gray-l)}.kpi .v{font-size:28px;font-weight:800;margin-top:4px}.kpi .s{font-size:11px;color:var(--gray-l)}
+.grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;flex:1;min-height:0}
+.panel{background:#fff;border-radius:14px;border:1px solid var(--slate-l);padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between}
+.panel h3 span{font-size:11px;color:var(--gray-l);font-weight:500}
+.map{flex:1;border-radius:10px;background:#EEF1F4;position:relative;overflow:hidden}
+.legend{position:absolute;bottom:10px;left:10px;background:#fff;border-radius:10px;padding:8px 10px;font-size:11px;line-height:1.7}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}
+.right{display:flex;flex-direction:column;gap:16px;min-height:0}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--gray-l);font-weight:600;padding:6px 4px;border-bottom:1px solid var(--slate-l)}
+td{padding:8px 4px;border-bottom:1px solid var(--slate-xl)}
+.st{font-size:11px;font-weight:700;padding:3px 8px;border-radius:10px}
+.st.r{background:rgba(192,57,43,.12);color:var(--rouge)}.st.e{background:rgba(217,165,32,.18);color:#8A6A12}.st.s{background:var(--slate-l);color:var(--slate-d)}
+.pend{border:1.5px solid var(--rouge);border-radius:12px;padding:12px;font-size:12px;line-height:1.5}
+.pend b{color:var(--rouge)}.pend .a{display:flex;gap:8px;margin-top:10px}
+.pend .a span{padding:8px 12px;border-radius:9px;font-weight:700;font-size:12px;background:var(--slate-l);color:var(--slate-d)}
+.pend .a span.ok{background:var(--rouge);color:#fff}
+.anim{animation-play-state:paused!important;animation-fill-mode:both!important}
+.fb{transform-box:fill-box;transform-origin:center}
+.x{position:relative;display:inline-block}.x>.b{position:absolute;left:0;top:0;white-space:nowrap}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(3);opacity:0}}
+@keyframes rowIn{0%{opacity:0;transform:translateX(30px);background:#FBE9E7}40%{opacity:1;transform:none;background:#FBE9E7}100%{opacity:1;transform:none;background:#fff}}
+@keyframes cur{0%,38%{transform:translate(900px,640px)}48%,62%{transform:translate(1052px,322px)}72%,80%{transform:translate(1335px,468px)}90%,100%{transform:translate(1190px,610px)}}
+@keyframes click{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+@keyframes press{0%{transform:scale(1)}50%{transform:scale(.93)}100%{transform:scale(1)}}
+.cursor{position:absolute;left:0;top:0;z-index:50;width:26px;height:26px}
+.ripple{position:absolute;width:40px;height:40px;border-radius:50%;border:3px solid rgba(27,58,96,.6);z-index:49}
+@keyframes io{0%{opacity:0}4%{opacity:1}96%{opacity:1}100%{opacity:0}}</style></head><body style="position:relative">
+<div class="side">
+ <div class="brand"><img src="logo_drop.png"><div><b>Hydrotic CI</b><small>Espace autorités</small></div></div>
+ <div class="it on">Vue d'ensemble</div><div class="it">Alertes <span class="badge">1</span></div><div class="it">SOS victimes <span class="badge x"><span>3</span><span class="b anim" style="animation:fadeIn .2s ease 1.6s;background:var(--rouge);border-radius:10px;padding:1px 7px;left:0">4</span></span></div>
+ <div class="it">Signalements</div><div class="it">Prévisions</div><div class="it">Historique & export</div><div class="it">Zones et seuils</div><div class="it">Supervision</div>
+</div>
+<div class="main">
+ <div class="hd"><div><h1>Vue d'ensemble</h1><p>Mercredi 17 juin · mise à jour il y a 2 min · Agent : ONPC Abidjan Sud</p></div><div class="btn">+ Alerte manuelle</div></div>
+ <div class="kpis">
+  <div class="kpi"><div class="k">Zones en alerte</div><div class="v">2 / 2</div><div class="s">1 rouge · 1 orange</div></div>
+  <div class="kpi"><div class="k">SOS actifs</div><div class="v x"><span class="anim" style="animation:fadeOut .2s ease 1.7s">3</span><span class="b anim" style="animation:fadeIn .2s ease 1.7s">4</span></div><div class="s x" style="display:block"><span class="anim" style="animation:fadeOut .2s ease 1.7s">1 non pris en charge</span><span class="b anim" style="animation:io 5.6s linear 1.7s">2 non pris en charge</span><span class="b anim" style="animation:fadeIn .2s ease 7.3s">1 non pris en charge</span></div></div>
+  <div class="kpi"><div class="k">Signalements confirmés</div><div class="v">11</div><div class="s">sur 17 reçus (2 h)</div></div>
+  <div class="kpi"><div class="k">Alertes délivrées</div><div class="v">86 %</div><div class="s">push + e-mail, zone rouge</div></div>
+ </div>
+ <div class="grid">
+  <div class="panel"><h3>Carte des risques, signalements et victimes <span>Schéma illustratif</span></h3>
+   <div class="map"><svg width="100%" height="100%" viewBox="0 0 760 700" preserveAspectRatio="xMidYMid meet">
+    <path d="M0 520 C150 490 260 550 380 520 S620 470 760 510 L760 700 L0 700Z" fill="#DCE4EC"/>
+    <path d="M0 260 L760 290" stroke="#fff" stroke-width="12"/><path d="M300 0 L340 700" stroke="#fff" stroke-width="12"/><path d="M690 0 L660 700" stroke="#fff" stroke-width="9"/>
+    <path d="M410 40 C520 20 640 70 650 150 C660 230 560 260 480 230 C420 200 380 90 410 40Z" fill="rgba(192,57,43,.2)" stroke="#C0392B" stroke-width="2"/>
+    <text x="400" y="28" font-size="15" font-weight="700" fill="#464A4F" font-family="Inter">Cocody — Riviera Palmeraie</text>
+    <path d="M60 330 C150 310 250 340 260 400 C270 450 170 480 100 460 C40 440 20 360 60 330Z" fill="rgba(217,115,30,.22)" stroke="#D9731E" stroke-width="2"/>
+    <text x="95" y="318" font-size="15" font-weight="700" fill="#464A4F" font-family="Inter">Treichville</text>
+    <circle cx="520" cy="160" r="11" fill="#C0392B" stroke="#fff" stroke-width="3"/><circle cx="585" cy="110" r="11" fill="#C0392B" stroke="#fff" stroke-width="3"/>
+    <circle cx="470" cy="190" r="11" fill="#C0392B" stroke="#fff" stroke-width="3"/><circle class="anim fb" style="animation:pulse 1.2s ease-out 1.5s" cx="150" cy="430" r="11" fill="rgba(192,57,43,.5)"/><circle class="anim fb" style="animation:pulse 1.2s ease-out 2.7s" cx="150" cy="430" r="11" fill="rgba(192,57,43,.5)"/><circle class="anim fb" style="animation:pop .4s ease 1.5s" cx="150" cy="430" r="11" fill="#C0392B" stroke="#fff" stroke-width="3"/>
+    <rect x="545" y="185" width="14" height="14" rx="3" fill="#6C809A" stroke="#fff" stroke-width="2"/><rect x="430" y="80" width="14" height="14" rx="3" fill="#6C809A" stroke="#fff" stroke-width="2"/>
+    <rect x="200" y="370" width="14" height="14" rx="3" fill="#6C809A" stroke="#fff" stroke-width="2"/><rect x="110" y="360" width="14" height="14" rx="3" fill="#6C809A" stroke="#fff" stroke-width="2"/>
+   </svg>
+   <div class="legend"><span class="dot" style="background:var(--rouge)"></span>Victime (SOS) &nbsp; <span class="dot" style="background:var(--slate);border-radius:3px"></span>Signalement confirmé<br><span class="dot" style="background:rgba(192,57,43,.4)"></span>Zone rouge &nbsp; <span class="dot" style="background:rgba(217,115,30,.4)"></span>Zone orange</div></div>
+  </div>
+  <div class="right">
+   <div class="panel"><h3>Alerte en attente de validation</h3>
+    <div class="pend"><b>ROUGE · Riviera Palmeraie</b> — probabilité 0,82, 7 signalements confirmés rue Ministre.<br>Message : « ALERTE Hydrotic CI : danger d'inondation imminent… »
+    <div class="a x" style="display:flex;height:34px"><div class="anim" style="display:flex;gap:8px;animation:fadeOut .25s ease 5.0s"><span class="ok anim" style="animation:press .3s ease 4.85s">Valider et envoyer</span><span>Modifier</span><span>Annuler</span></div><div class="b anim" style="animation:fadeIn .3s ease 5.1s"><span style="background:var(--slate);color:#fff">✓ Envoyée · push + e-mail</span></div></div></div></div>
+   <div class="panel" style="flex:1"><h3>SOS victimes <span>temps réel</span></h3>
+    <table><tr><th>Heure</th><th>Lieu</th><th>Pers.</th><th>Détails</th><th>Statut</th></tr>
+     <tr class="anim" style="animation:rowIn 2.5s ease 1.6s"><td>17:12</td><td>Treichville, av. 21</td><td>3</td><td>Enfants, genou</td><td><span class="x"><span class="st r anim" style="animation:fadeOut .2s ease 7.2s">Reçu</span><span class="st e b anim" style="animation:fadeIn .2s ease 7.2s">En route</span></span></td></tr>
+     <tr><td>17:08</td><td>Palmeraie, zone 5</td><td>2</td><td>Blessé</td><td><span class="st r">Reçu</span></td></tr>
+     <tr><td>16:57</td><td>Rue Ministre</td><td>5</td><td>Taille</td><td><span class="st e">En route</span></td></tr>
+     <tr><td>16:41</td><td>Palmeraie</td><td>1</td><td>Âgé</td><td><span class="st s">Secouru</span></td></tr>
+    </table></div>
+  </div>
+ </div>
+</div>
+<svg class="cursor anim" style="animation:cur 10s linear 0s" viewBox="0 0 24 24"><path d="M3 2 L3 20 L8 15 L11.5 22 L14.5 20.6 L11 13.8 L18 13.8 Z" fill="#1B1D20" stroke="#fff" stroke-width="1.5"/></svg>
+<div class="ripple anim" style="left:1032px;top:302px;animation:click .5s ease 4.85s"></div>
+<div class="ripple anim" style="left:1315px;top:448px;animation:click .5s ease 7.1s"></div>
+</body></html>

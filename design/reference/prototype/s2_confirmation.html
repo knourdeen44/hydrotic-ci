@@ -1,0 +1,39 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><link rel="stylesheet" href="app.css">
+<style>.fb{transform-box:fill-box;transform-origin:center}</style></head><body><div class="stage"><div class="phone">
+ <div class="sb"><span>17:05</span><span>4G ▮▮▮ 54 %</span></div>
+ <div class="map">
+  <svg viewBox="0 0 340 690" width="340" height="690">
+   <path d="M0 120 C80 140 120 90 200 130 S320 160 340 140 L340 0 L0 0Z" fill="#DCE4EC"/>
+   <path d="M-10 260 L360 300" stroke="#fff" stroke-width="14"/><path d="M120 0 L170 700" stroke="#fff" stroke-width="12"/>
+   <path d="M-10 440 L360 400" stroke="#fff" stroke-width="10"/><path d="M260 120 L230 700" stroke="#fff" stroke-width="8"/>
+   <path d="M60 180 C110 200 150 300 140 380 C130 440 70 450 40 390 C10 330 20 200 60 180Z" fill="rgba(217,115,30,.25)" stroke="#D9731E" stroke-width="2"/>
+   <path d="M170 210 C230 200 290 250 280 330 C270 390 200 380 180 330Z" fill="rgba(217,115,30,.22)" stroke="#D9731E" stroke-width="2"/>
+   <path class="anim" style="animation:fadeIn .6s ease 5.6s" d="M170 210 C230 200 290 250 280 330 C270 390 200 380 180 330Z" fill="rgba(192,57,43,.30)" stroke="#C0392B" stroke-width="2.5"/>
+   <path class="anim" style="animation:fadeIn .6s ease 5.6s" d="M141 255 L178 300" stroke="#C0392B" stroke-width="7" stroke-linecap="round"/>
+   <circle class="anim fb" style="animation:pulse 1.4s ease-out 1.2s" cx="160" cy="278" r="15" fill="rgba(192,57,43,.35)"/>
+   <g class="anim fb" style="animation:pop .45s ease 1.0s"><circle cx="160" cy="278" r="15" fill="#C0392B"/><text x="160" y="283" text-anchor="middle" font-size="13" fill="#fff" font-weight="700" font-family="Inter">!</text></g>
+   <circle cx="90" cy="320" r="9" fill="#6C809A" stroke="#fff" stroke-width="3"/>
+   <circle cx="230" cy="290" r="9" fill="#6C809A" stroke="#fff" stroke-width="3"/>
+   <circle cx="200" cy="350" r="22" fill="rgba(108,128,154,.18)"/><circle cx="200" cy="350" r="8" fill="#1B3A60" stroke="#fff" stroke-width="3"/>
+   <text x="186" y="236" font-size="11" fill="#464A4F" font-weight="700" font-family="Inter">Rue Ministre</text>
+  </svg>
+  <div class="legend"><span class="dot" style="background:var(--rouge)"></span> Inondé (confirmé)<br><span class="dot" style="background:var(--slate)"></span> Signalement<br><span class="dot" style="background:var(--deep)"></span> Vous</div>
+  <div class="sheet anim" style="animation:sheetUp .6s cubic-bezier(.2,.9,.3,1) 2.0s;height:236px">
+   <div class="grab"></div>
+   <div class="xfade" style="height:190px">
+    <div class="anim" style="animation:fadeOut .35s ease 5.0s">
+     <div class="q">La rue Ministre est-elle toujours inondée ?</div>
+     <div class="qs">Vous êtes à 140 m. Votre réponse aide vos voisins et les secours.</div>
+     <div class="ans"><span class="yes anim" style="animation:press .3s ease 4.55s">Oui</span><span class="no">Non</span><span class="idk">Je ne sais pas</span></div>
+     <div class="meta"><span>Signalé il y a 38 min</span><span>7 « oui » · 1 « non »</span></div>
+    </div>
+    <div class="anim" style="animation:fadeIn .4s ease 5.2s">
+     <div style="display:flex;align-items:center;gap:10px"><span style="width:34px;height:34px;border-radius:50%;background:var(--slate);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">✓</span><div class="q">Merci, c'est noté !</div></div>
+     <div class="qs" style="margin-top:10px">Rue Ministre : <b style="color:var(--rouge)">inondation confirmée</b> par 8 habitants. Les autorités voient l'information sur leur tableau de bord.</div>
+     <div class="meta"><span>Votre fiabilité : 1,2</span><span>8 « oui » · 1 « non »</span></div>
+    </div>
+   </div>
+  </div>
+  <div class="touch anim" style="left:42px;top:600px;animation:tap .7s ease 4.3s"></div>
+ </div>
+</div></div></body></html>

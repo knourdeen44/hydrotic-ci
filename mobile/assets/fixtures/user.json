@@ -1,0 +1,5 @@
+{
+  "_note": "Données fictives de démonstration — ne pas présenter comme réelles.",
+  "citoyen": { "id": "u-awa", "prenom": "Awa", "quartierPrincipal": "Treichville · Avenue 21", "zonesSuivies": ["treichville", "palmeraie"], "canaux": { "push": true, "email": true }, "scoreFiabilite": 1.2, "role": "CITOYEN" },
+  "agent": { "id": "u-traore", "nom": "Lieutenant Traoré", "service": "ONPC Abidjan Sud", "role": "AGENT" }
+}
