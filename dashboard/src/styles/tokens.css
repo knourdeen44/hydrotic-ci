@@ -1,0 +1,121 @@
+/* GÉNÉRÉ par tools/gen_tokens.mjs depuis design/tokens.json — ne pas modifier à la main. */
+
+:root {
+  /* Couleurs */
+  --color-slate: #6C809A;
+  --color-slate-dark: #55667D;
+  --color-slate-light: #E1E6EC;
+  --color-slate-xlight: #F3F5F8;
+  --color-gray: #464A4F;
+  --color-gray-light: #8A9097;
+  --color-deep: #1B3A60;
+  --color-phone-frame: #2B2E31;
+  --color-map-background: #EEF1F4;
+  --color-map-water: #DCE4EC;
+  --color-white: #FFFFFF;
+  --color-risk-vert: #3F8F5B;
+  --color-risk-jaune: #D9A520;
+  --color-risk-orange: #D9731E;
+  --color-risk-rouge: #C0392B;
+  --color-status-recu-bg: rgba(192,57,43,.12);
+  --color-status-recu-fg: #C0392B;
+  --color-status-en-route-bg: rgba(217,165,32,.18);
+  --color-status-en-route-fg: #8A6A12;
+  --color-status-secouru-bg: #E1E6EC;
+  --color-status-secouru-fg: #55667D;
+  --color-overlay-zone-orange-fill: rgba(217,115,30,.22);
+  --color-overlay-zone-orange-stroke: #D9731E;
+  --color-overlay-zone-rouge-fill: rgba(192,57,43,.22);
+  --color-overlay-zone-rouge-stroke: #C0392B;
+
+  /* Ombres */
+  --shadow-sos: 0 6px 16px rgba(192,57,43,.35);
+  --shadow-banner: 0 10px 30px rgba(0,0,0,.18);
+  --shadow-sheet: 0 -6px 20px rgba(0,0,0,.10);
+  --shadow-legend: 0 2px 8px rgba(0,0,0,.06);
+
+  /* Typographie */
+  --font-family: Inter, system-ui, sans-serif;
+  --text-mobile-risk-title-size: 26px;
+  --text-mobile-risk-title-weight: 800;
+  --text-mobile-screen-title-size: 20px;
+  --text-mobile-screen-title-weight: 800;
+  --text-mobile-sheet-title-size: 17px;
+  --text-mobile-sheet-title-weight: 800;
+  --text-mobile-sheet-title-line-height: 1.3;
+  --text-mobile-greeting-size: 16px;
+  --text-mobile-greeting-weight: 700;
+  --text-mobile-stat-value-size: 15px;
+  --text-mobile-stat-value-weight: 700;
+  --text-mobile-button-size: 14px;
+  --text-mobile-button-weight: 700;
+  --text-mobile-section-title-size: 13px;
+  --text-mobile-section-title-weight: 700;
+  --text-mobile-body-size: 13px;
+  --text-mobile-body-weight: 400;
+  --text-mobile-body-line-height: 1.4;
+  --text-mobile-overline-size: 12px;
+  --text-mobile-overline-weight: 600;
+  --text-mobile-overline-letter-spacing: 1px;
+  --text-mobile-caption-size: 12px;
+  --text-mobile-caption-weight: 400;
+  --text-mobile-small-size: 11px;
+  --text-mobile-small-weight: 400;
+  --text-mobile-nav-label-size: 10px;
+  --text-mobile-nav-label-weight: 400;
+  --text-mobile-nav-label-active-weight: 700;
+  --text-dash-page-title-size: 22px;
+  --text-dash-page-title-weight: 800;
+  --text-dash-kpi-value-size: 28px;
+  --text-dash-kpi-value-weight: 800;
+  --text-dash-panel-title-size: 14px;
+  --text-dash-panel-title-weight: 700;
+  --text-dash-nav-size: 13px;
+  --text-dash-nav-weight: 400;
+  --text-dash-nav-active-weight: 600;
+  --text-dash-body-size: 12px;
+  --text-dash-body-weight: 400;
+  --text-dash-small-size: 11px;
+  --text-dash-small-weight: 400;
+
+  /* Rayons */
+  --radius-card: 18px;
+  --radius-mini: 14px;
+  --radius-action: 14px;
+  --radius-button: 14px;
+  --radius-sheet: 24px;
+  --radius-legend: 12px;
+  --radius-chip: 20px;
+  --radius-nav-icon: 6px;
+  --radius-pill: 999px;
+  --radius-dash-panel: 14px;
+  --radius-dash-button: 10px;
+  --radius-dash-chip: 10px;
+
+  /* Espacements */
+  --space-screen-padding: 16px;
+  --space-header-padding-x: 18px;
+  --space-card-padding: 16px;
+  --space-gap-s: 7px;
+  --space-gap-m: 10px;
+  --space-gap-l: 12px;
+  --space-sheet-padding: 18px;
+  --space-dash-padding: 26px;
+  --space-dash-gap: 16px;
+
+  /* Tailles */
+  --size-mobile-reference-viewport-width: 340px;
+  --size-mobile-reference-viewport-height: 720px;
+  --size-status-bar: 34px;
+  --size-bottom-nav: 64px;
+  --size-risk-card: 148px;
+  --size-rain-bars: 70px;
+  --size-sos-fab: 62px;
+  --size-sos-button: 150px;
+  --size-sos-ring: 190px;
+  --size-avatar-logo: 34px;
+  --size-touch-target: 44px;
+  --size-dashboard-reference-viewport-width: 1440px;
+  --size-dashboard-reference-viewport-height: 880px;
+  --size-dash-sidebar: 230px;
+}

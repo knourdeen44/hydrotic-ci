@@ -30,6 +30,8 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: dashboard/package-lock.json
+      - name: Tokens — fichiers générés à jour
+        run: node tools/gen_tokens.mjs --check
       - name: Tableau de bord — lint et build
         working-directory: dashboard
         run: |

@@ -1,0 +1,15 @@
+/* Styles de base : uniquement des variables issues de tokens.css. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--text-dash-body-size);
+  color: var(--color-gray);
+  background: var(--color-slate-xlight);
+}
