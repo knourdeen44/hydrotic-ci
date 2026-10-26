@@ -33,7 +33,7 @@ class _Step extends StatelessWidget {
   final bool aVenir;
 
   static const _fondu = Duration(milliseconds: 300);
-  static const double _hauteurLigneTitre = 16 * 1.21 / 14;
+  static final double _hauteurLigneTitre = HydroticText.hauteurNormale(16) * 16 / 14;
 
   @override
   Widget build(BuildContext context) {
