@@ -149,8 +149,11 @@ void main() {
     expect(envoye, isFalse);
 
     geste = await tester.startGesture(centre);
-    await tester.pump(const Duration(seconds: 3));
+    // Première frame : le ticker démarre ici (temps écoulé = 0).
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 2900));
+    expect(envoye, isFalse);
+    await tester.pump(const Duration(milliseconds: 150));
     expect(envoye, isTrue);
     await geste.up();
     await tester.pumpAndSettle();
