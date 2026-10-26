@@ -1,0 +1,123 @@
+/* Briques communes du tableau de bord (prototype s4_dashboard.html). */
+
+.hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-dash-gap);
+}
+
+.titre {
+  font-size: var(--text-dash-page-title-size);
+  font-weight: var(--text-dash-page-title-weight);
+}
+
+.sousTitre {
+  font-size: var(--text-dash-body-size);
+  color: var(--color-gray-light);
+}
+
+.btn {
+  background: var(--color-slate);
+  color: var(--color-white);
+  padding: 10px 16px;
+  border-radius: var(--radius-dash-button);
+  font-size: var(--text-dash-nav-size);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--color-slate-dark);
+}
+
+.panel {
+  background: var(--color-white);
+  border-radius: var(--radius-dash-panel);
+  border: 1px solid var(--color-slate-light);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panelTitre {
+  font-size: var(--text-dash-panel-title-size);
+  font-weight: var(--text-dash-panel-title-weight);
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.panelAside {
+  font-size: var(--text-dash-small-size);
+  color: var(--color-gray-light);
+  font-weight: 500;
+}
+
+.kpi {
+  background: var(--color-white);
+  border-radius: var(--radius-dash-panel);
+  padding: 14px 16px;
+  border: 1px solid var(--color-slate-light);
+}
+
+.kpiLibelle {
+  font-size: var(--text-dash-body-size);
+  color: var(--color-gray-light);
+}
+
+.kpiValeur {
+  font-size: var(--text-dash-kpi-value-size);
+  font-weight: var(--text-dash-kpi-value-weight);
+  margin-top: 4px;
+}
+
+.kpiDetail {
+  font-size: var(--text-dash-small-size);
+  color: var(--color-gray-light);
+}
+
+.st {
+  font-size: var(--text-dash-small-size);
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-dash-chip);
+  white-space: nowrap;
+}
+
+.stBouton {
+  /* Bouton cliquable : même hauteur de ligne qu'une étiquette en ligne (prototype : span). */
+  margin-block: -3px;
+  vertical-align: baseline;
+  line-height: normal;
+}
+
+.stBouton:hover {
+  filter: brightness(0.95);
+}
+
+.recu {
+  background: var(--color-status-recu-bg);
+  color: var(--color-status-recu-fg);
+}
+
+.enRoute {
+  background: var(--color-status-en-route-bg);
+  color: var(--color-status-en-route-fg);
+}
+
+.secouru {
+  background: var(--color-status-secouru-bg);
+  color: var(--color-status-secouru-fg);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: -1px;
+}

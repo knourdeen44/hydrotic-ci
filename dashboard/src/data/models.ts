@@ -26,6 +26,8 @@ export interface Zone {
   svgMobile: string
   /** Contour schématique (chemin SVG) pour la carte du tableau de bord. */
   svgDashboard: string
+  /** Position du nom de la zone sur la carte du tableau de bord. */
+  etiquetteDashboard?: PointSvg
 }
 
 /** Prévision de risque d'une zone (UML : Prediction). */

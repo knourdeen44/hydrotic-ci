@@ -1,0 +1,16 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+  height: 100vh;
+  background: var(--color-slate-xlight);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 22px var(--space-dash-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-dash-gap);
+  overflow: auto;
+}

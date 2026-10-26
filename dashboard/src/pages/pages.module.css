@@ -1,0 +1,87 @@
+/* Mise en page des écrans D2 à D8. */
+
+.filtres {
+  display: flex;
+  gap: 10px;
+}
+
+.select {
+  padding: 8px 12px;
+  border-radius: var(--radius-dash-button);
+  border: 1px solid var(--color-slate-light);
+  background: var(--color-white);
+  font-size: var(--text-dash-nav-size);
+}
+
+.deuxColonnes {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-dash-gap);
+  flex: 1;
+  min-height: 0;
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-dash-gap);
+}
+
+.niveaux {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.niveau {
+  border-radius: var(--radius-dash-panel);
+  padding: 14px 16px;
+  color: var(--color-white);
+}
+
+.niveauJour {
+  font-size: var(--text-dash-small-size);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.niveauMot {
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.texte {
+  color: var(--color-gray-light);
+  line-height: 1.5;
+}
+
+.liste {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.puce {
+  background: var(--color-slate-light);
+  color: var(--color-slate-dark);
+  border-radius: var(--radius-chip);
+  padding: 4px 10px;
+  font-size: var(--text-dash-small-size);
+  font-weight: 600;
+}
+
+.etat {
+  align-self: flex-start;
+  margin-top: 8px;
+  background: var(--color-slate-light);
+  color: var(--color-slate-dark);
+  border-radius: var(--radius-dash-chip);
+  padding: 3px 8px;
+  font-size: var(--text-dash-small-size);
+  font-weight: 700;
+}

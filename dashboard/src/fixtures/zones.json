@@ -4,10 +4,12 @@
     { "id": "treichville", "nom": "Treichville", "commune": "Treichville", "profil": "Commune centrale, dense et commerciale",
       "sousZones": ["Avenue 21", "Rue des Brasseurs (SOCOCE)", "Rue 7", "Gare de Bassam"],
       "svgMobile": "M60 180 C110 200 150 300 140 380 C130 440 70 450 40 390 C10 330 20 200 60 180Z",
-      "svgDashboard": "M60 330 C150 310 250 340 260 400 C270 450 170 480 100 460 C40 440 20 360 60 330Z" },
+      "svgDashboard": "M60 330 C150 310 250 340 260 400 C270 450 170 480 100 460 C40 440 20 360 60 330Z",
+      "etiquetteDashboard": { "x": 95, "y": 318 } },
     { "id": "palmeraie", "nom": "Riviera Palmeraie", "commune": "Cocody", "profil": "Quartier résidentiel, rue Ministre",
       "sousZones": ["Rue Ministre", "Zone 5"],
       "svgMobile": "M170 210 C230 200 290 250 280 330 C270 390 200 380 180 330Z",
-      "svgDashboard": "M410 40 C520 20 640 70 650 150 C660 230 560 260 480 230 C420 200 380 90 410 40Z" }
+      "svgDashboard": "M410 40 C520 20 640 70 650 150 C660 230 560 260 480 230 C420 200 380 90 410 40Z",
+      "etiquetteDashboard": { "x": 400, "y": 28 } }
   ]
 }

@@ -1,0 +1,53 @@
+.figure {
+  margin: 0;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+.mm {
+  font-size: var(--text-dash-small-size);
+  color: var(--color-gray-light);
+}
+
+.bar {
+  width: 100%;
+  background: var(--color-slate);
+  border-radius: 4px 4px 0 0;
+}
+
+.prevision {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-slate),
+    var(--color-slate) 4px,
+    var(--color-slate-light) 4px,
+    var(--color-slate-light) 8px
+  );
+}
+
+.labels {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+  font-size: var(--text-dash-small-size);
+  color: var(--color-gray-light);
+}
+
+.labels span {
+  flex: 1;
+  text-align: center;
+}

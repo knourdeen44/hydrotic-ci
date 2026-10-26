@@ -43,6 +43,27 @@ jobs:
           npm ci
           npm run lint
           npm run build -- --base=$BASE/dashboard/
+      - name: Tableau de bord — navigateur de test
+        working-directory: dashboard
+        run: npx playwright install --with-deps chromium
+      - name: Tableau de bord — tests Playwright (D1 à D8, comparaison à la maquette)
+        if: ${{ !inputs.goldens }}
+        working-directory: dashboard
+        run: npx playwright test
+      - name: Tableau de bord — régénération des captures
+        if: ${{ inputs.goldens }}
+        working-directory: dashboard
+        run: npx playwright test --grep @regression --update-snapshots
+      - name: Tableau de bord — captures et rapport
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-captures
+          path: |
+            dashboard/tests/captures/
+            dashboard/test-results/
+            dashboard/playwright-report/
+          if-no-files-found: ignore
 
       # Application citoyenne (Flutter)
       - uses: subosito/flutter-action@v2

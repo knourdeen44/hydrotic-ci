@@ -1,15 +1,23 @@
-import alertsJson from '../../fixtures/alerts.json'
-import dashboardJson from '../../fixtures/dashboard.json'
-import reportsJson from '../../fixtures/reports.json'
-import riskJson from '../../fixtures/risk.json'
-import sosJson from '../../fixtures/sos.json'
-import userJson from '../../fixtures/user.json'
-import zonesJson from '../../fixtures/zones.json'
+import alertsFixture from '../../fixtures/alerts.json'
+import dashboardFixture from '../../fixtures/dashboard.json'
+import reportsFixture from '../../fixtures/reports.json'
+import riskFixture from '../../fixtures/risk.json'
+import sosFixture from '../../fixtures/sos.json'
+import userFixture from '../../fixtures/user.json'
+import zonesFixture from '../../fixtures/zones.json'
 import { NIVEAUX, type NiveauInfo, type NiveauRisque, type Signalement } from '../models'
 import type { Repositories } from '../repositories'
 import * as parse from './parse'
 
 // Dépôts « mock » : lisent les fixtures, sans réseau. Les modifications restent en mémoire.
+
+const alertsJson = parse.typographie(alertsFixture)
+const dashboardJson = parse.typographie(dashboardFixture)
+const reportsJson = parse.typographie(reportsFixture)
+const riskJson = parse.typographie(riskFixture)
+const sosJson = parse.typographie(sosFixture)
+const userJson = parse.typographie(userFixture)
+const zonesJson = parse.typographie(zonesFixture)
 
 function find<T>(items: T[], predicate: (item: T) => boolean, what: string): T {
   const item = items.find(predicate)

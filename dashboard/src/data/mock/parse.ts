@@ -14,6 +14,24 @@ import {
 
 // Conversion des fixtures JSON vers les modèles, avec contrôle des valeurs énumérées.
 
+/** Espace insécable. */
+export const NBSP = '\u00A0'
+
+/** Typographie française : espace insécable avant « : ? ! % » et à l'intérieur des guillemets. */
+export function typographieFr(text: string): string {
+  return text.replace(/ ([:?!%»])/g, `${NBSP}$1`).replace(/« /g, `«${NBSP}`)
+}
+
+/** Applique [typographieFr] à toutes les chaînes d'une fixture. */
+export function typographie<T>(value: T): T {
+  if (typeof value === 'string') return typographieFr(value) as T
+  if (Array.isArray(value)) return value.map(typographie) as T
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, typographie(v)])) as T
+  }
+  return value
+}
+
 /** Vérifie qu'une chaîne fait partie des valeurs autorisées. */
 export function oneOf<T extends string>(value: string, allowed: readonly T[]): T {
   if (!(allowed as readonly string[]).includes(value)) {

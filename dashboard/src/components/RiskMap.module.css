@@ -1,0 +1,58 @@
+.map {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-dash-button);
+  background: var(--color-map-background);
+  position: relative;
+  overflow: hidden;
+}
+
+.map svg {
+  position: absolute;
+  inset: 0;
+}
+
+.etiquette {
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--color-gray);
+  font-family: var(--font-family);
+}
+
+.sos {
+  fill: var(--color-risk-rouge);
+  stroke: var(--color-white);
+}
+
+.signalement {
+  fill: var(--color-slate);
+  stroke: var(--color-white);
+}
+
+.legend {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: var(--color-white);
+  border-radius: var(--radius-dash-button);
+  padding: 8px 10px;
+  font-size: var(--text-dash-small-size);
+  line-height: 1.7;
+}
+
+.dotSos {
+  background: var(--color-risk-rouge);
+}
+
+.dotSignalement {
+  background: var(--color-slate);
+  border-radius: 3px;
+}
+
+.dotRouge {
+  background: color-mix(in srgb, var(--color-risk-rouge) 40%, transparent);
+}
+
+.dotOrange {
+  background: color-mix(in srgb, var(--color-risk-orange) 40%, transparent);
+}

@@ -1,0 +1,48 @@
+.pend {
+  border: 1.5px solid var(--color-risk-rouge);
+  border-radius: var(--radius-legend);
+  padding: 12px;
+  font-size: var(--text-dash-body-size);
+  line-height: 1.5;
+}
+
+.niveau {
+  color: var(--color-risk-rouge);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  height: 34px;
+}
+
+.action {
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: var(--text-dash-body-size);
+  line-height: 1.5;
+  background: var(--color-slate-light);
+  color: var(--color-slate-dark);
+  animation: apparition 0.3s ease;
+}
+
+.ok {
+  background: var(--color-risk-rouge);
+  color: var(--color-white);
+}
+
+.envoyee {
+  background: var(--color-slate);
+  color: var(--color-white);
+}
+
+@keyframes apparition {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
