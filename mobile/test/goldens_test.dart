@@ -52,18 +52,25 @@ Future<void> _capture(
     ..padding = const FakeViewPadding(top: 68);
   addTearDown(tester.view.reset);
 
-  await pumpApp(tester, location);
-  if (action != null) await action(tester);
-  await tester.pumpAndSettle();
+  // flutter_test dessine par défaut les ombres sans flou (bande grise) : on garde les vraies ombres.
+  // Rétabli avant la fin du test (vérification des variables de débogage).
+  debugDisableShadows = false;
+  try {
+    await pumpApp(tester, location);
+    if (action != null) await action(tester);
+    await tester.pumpAndSettle();
 
-  // Les images (logos) se chargent hors du temps simulé.
-  await tester.runAsync(() async {
-    for (final element in find.byType(Image).evaluate()) {
-      await precacheImage((element.widget as Image).image, element);
-    }
-  });
-  await tester.pumpAndSettle();
-  await expectLater(find.byType(HydroticApp), matchesGoldenFile('goldens/$nom.png'));
+    // Les images (logos) se chargent hors du temps simulé.
+    await tester.runAsync(() async {
+      for (final element in find.byType(Image).evaluate()) {
+        await precacheImage((element.widget as Image).image, element);
+      }
+    });
+    await tester.pumpAndSettle();
+    await expectLater(find.byType(HydroticApp), matchesGoldenFile('goldens/$nom.png'));
+  } finally {
+    debugDisableShadows = true;
+  }
 }
 
 void main() {

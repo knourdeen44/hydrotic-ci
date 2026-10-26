@@ -97,13 +97,16 @@ function dartTextStyle({ size, weight, lineHeight, letterSpacing }, family) {
 
 function genDartText() {
   const t = tokens.typography
+  const normal = t.lineHeightNormal.value
   const lines = [
     `// ${HEADER}`, '', "import 'package:flutter/painting.dart';", '',
     '/// Styles de texte Hydrotic CI (application mobile).',
     'abstract final class HydroticText {',
     `  static const String fontFamily = '${t.fontFamily}';`, '',
   ]
-  for (const [name, def] of entries(t.mobile)) {
+  for (const [name, style] of entries(t.mobile)) {
+    // Hauteur de ligne explicite partout (voir typography.lineHeightNormal).
+    const def = { ...style, lineHeight: style.lineHeight ?? normal }
     if (def.transform === 'uppercase') lines.push('  /// À afficher en MAJUSCULES (`toUpperCase()`).')
     lines.push(`  static const TextStyle ${name} = ${dartTextStyle(def, 'fontFamily')};`)
     if (def.activeWeight) {
