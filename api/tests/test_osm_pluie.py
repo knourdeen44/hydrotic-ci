@@ -19,9 +19,10 @@ def test_contours_et_positions_osm_dans_leur_quartier():
     with _db() as c:
         zones = c.execute("SELECT id, ST_GeometryType(contour::geometry) AS t, ST_Area(contour) / 1e6 AS km2 FROM zone").fetchall()
         assert {z["id"]: z["t"] for z in zones} == {"treichville": "ST_MultiPolygon", "palmeraie": "ST_MultiPolygon"}
-        # Treichville : environ 8 km² (commune) ; Riviera Palmeraie : environ 2 km².
+        # Treichville : contour administratif OSM ≈ 14,7 km² (lagune et zone portuaire comprises) ;
+        # Riviera Palmeraie : zone résidentielle de quelques km².
         aires = {z["id"]: z["km2"] for z in zones}
-        assert 5 < aires["treichville"] < 12 and 0.5 < aires["palmeraie"] < 5
+        assert 10 < aires["treichville"] < 20 and 0.5 < aires["palmeraie"] < 5
         hors = c.execute(
             """SELECT s.id FROM signalement s JOIN zone z ON z.id = s.zone_id
                WHERE NOT ST_Within(s.position::geometry, z.contour::geometry)"""
