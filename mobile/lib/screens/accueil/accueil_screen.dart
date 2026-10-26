@@ -8,20 +8,18 @@ import '../../data/models/alerte.dart';
 import '../../data/models/niveau_risque.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
-import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
-import '../../theme/hydrotic_text.dart';
 import '../../theme/risk_colors.dart';
 import '../../widgets/bottom_nav.dart';
-import '../../widgets/consignes_sheet.dart';
 import '../../widgets/hydrotic_header.dart';
 import '../../widgets/mini_stat.dart';
 import '../../widgets/notification_banner.dart';
 import '../../widgets/quick_actions.dart';
 import '../../widgets/rain_bars.dart';
 import '../../widgets/risk_card.dart';
-import '../../widgets/toast.dart';
+import '../../widgets/section_title.dart';
 import '../shell/citizen_scaffold.dart';
+import '../shell/consignes_overlay.dart';
 import 'accueil_data.dart';
 
 /// M1 — Accueil. Avec [scenarioAlerte], rejoue M2 (réception d'une alerte, vidéo v1_alerte).
@@ -87,7 +85,7 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
   }
 
   void _zoneSuivante(AccueilDonnees d) {
-    final suivies = d.citoyen.zonesSuivies;
+    final suivies = d.zonesSuivies;
     final suivante = suivies[(suivies.indexOf(d.zone.id) + 1) % suivies.length];
     ref.read(zoneActiveProvider.notifier).state = suivante;
   }
@@ -101,21 +99,12 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
       tab: HydroticTab.accueil,
       body: d == null ? const SizedBox.shrink() : _contenu(d),
       overlays: [
-        if (consignes != null && d != null) ...[
-          Positioned.fill(
-            bottom: CitizenScaffold.sheetBottom,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => setState(() => _consignes = null),
-            ),
+        if (consignes != null && d != null)
+          ...consignesOverlay(
+            niveau: consignes,
+            zone: d.zone.nom,
+            onClose: () => setState(() => _consignes = null),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: CitizenScaffold.sheetBottom,
-            child: _Consignes(niveau: consignes, zone: d.zone.nom),
-          ),
-        ],
         if (banniere != null)
           Positioned(
             left: 10,
@@ -144,7 +133,7 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
         HydroticHeader(
           prenom: d.citoyen.nom,
           quartier: d.quartier,
-          nbZones: d.citoyen.zonesSuivies.length,
+          nbZones: d.zonesSuivies.length,
           onZonesTap: () => _zoneSuivante(d),
         ),
         Expanded(
@@ -183,12 +172,12 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
                     ),
                   ],
                 ),
-                const _TitreSection(Fr.pluieTitre),
+                const SectionTitle(Fr.pluieTitre),
                 RainBars(jours: d.pluie),
-                const _TitreSection(Fr.accesRapide),
+                const SectionTitle(Fr.accesRapide),
                 QuickActions(
                   onCarte: () => context.go('/carte'),
-                  onSignaler: () => showToast(context, Fr.bientot),
+                  onSignaler: () => context.push('/signaler'),
                   onConsignes: () => setState(() => _consignes = demain),
                 ),
               ],
@@ -196,41 +185,6 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Titre de section (prototype : `.h`, marges 12 / 8).
-class _TitreSection extends StatelessWidget {
-  const _TitreSection(this.texte);
-
-  final String texte;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: HydroticSpacing.gapL, bottom: 8),
-      child: Text(texte, style: HydroticText.sectionTitle.copyWith(color: HydroticColors.gray)),
-    );
-  }
-}
-
-/// Feuille « Que faire avant demain ? » pour un niveau.
-class _Consignes extends ConsumerWidget {
-  const _Consignes({required this.niveau, required this.zone});
-
-  final NiveauRisque niveau;
-  final String zone;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final consignes = ref.watch(consignesProvider(niveau)).valueOrNull;
-    if (consignes == null) return const SizedBox.shrink();
-    return ConsignesSheet(
-      titre: Fr.queFaireAvantDemain,
-      sousTitre: Fr.consignesPour(niveau.name, zone),
-      consignes: consignes,
-      niveau: niveau,
     );
   }
 }

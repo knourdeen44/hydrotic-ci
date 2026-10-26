@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../l10n/fr.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/sos_fab.dart';
-import '../../widgets/toast.dart';
 
 /// Gabarit commun de l'application citoyenne : contenu, barre de navigation, bouton SOS
 /// (18 px du bord droit, 16 px au-dessus de la barre) et calques (bannière, feuilles).
@@ -38,9 +36,9 @@ class CitizenScaffold extends StatelessWidget {
       case HydroticTab.carte:
         context.go('/carte');
       case HydroticTab.alertes:
+        context.go('/alertes');
       case HydroticTab.profil:
-        // Écrans M5 et M6 : étape suivante.
-        showToast(context, Fr.bientot);
+        context.go('/profil');
     }
   }
 

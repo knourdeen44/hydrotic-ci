@@ -39,6 +39,19 @@ final positionVousProvider =
 
 final sosCourantProvider = FutureProvider<SosCourant>((ref) => ref.watch(sosRepositoryProvider).sosCourant());
 
+/// Quartiers choisis au démarrage (M0) ou depuis le profil. Nul : ceux des fixtures.
+final choixZonesProvider = StateProvider<List<String>?>((ref) => null);
+
+/// Quartiers suivis par le citoyen.
+final zonesSuiviesProvider = FutureProvider<List<String>>((ref) async {
+  final choix = ref.watch(choixZonesProvider);
+  final citoyen = ref.watch(citoyenProvider.future);
+  return choix ?? (await citoyen).zonesSuivies;
+});
+
+/// Canaux d'alerte choisis dans le profil (M6). Nul : ceux des fixtures.
+final canauxProvider = StateProvider<Set<Canal>?>((ref) => null);
+
 /// Zone affichée sur l'accueil (puce « 2 zones »). Nul : zone principale du citoyen.
 final zoneActiveProvider = StateProvider<String?>((ref) => null);
 

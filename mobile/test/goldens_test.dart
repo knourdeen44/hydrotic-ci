@@ -73,8 +73,23 @@ Future<void> _capture(
   }
 }
 
+/// Capture pas encore générée : test ignoré (sauf en régénération).
+bool _absente(String nom) => !autoUpdateGoldenFiles && !File('test/goldens/$nom.png').existsSync();
+
 void main() {
   setUpAll(_chargerPolices);
+
+  // Écrans sans maquette (M0, M5 à M7) : captures de non-régression.
+  for (final (nom, location) in [
+    ('m0_bienvenue', '/demarrage'),
+    ('m0_quartiers', '/demarrage?etape=quartiers'),
+    ('m0_autorisations', '/demarrage?etape=autorisations'),
+    ('m5_alertes', '/alertes'),
+    ('m6_profil', '/profil'),
+    ('m7_signaler', '/signaler'),
+  ]) {
+    testWidgets(nom, (tester) => _capture(tester, nom, location), skip: _absente(nom));
+  }
 
   testWidgets('M1 accueil', (tester) => _capture(tester, 'm1_accueil', '/'));
 

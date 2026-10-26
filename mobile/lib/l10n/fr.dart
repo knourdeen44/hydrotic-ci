@@ -7,7 +7,7 @@ const String nbsp = ' ';
 abstract final class Fr {
   // En-tête
   static String bonjour(String prenom) => 'Bonjour $prenom';
-  static String nbZones(int n) => '$n zones';
+  static String nbZones(int n) => n > 1 ? '$n zones' : '$n zone';
 
   // Carte de risque (affiché en majuscules)
   static String demainNiveau(String niveau) => 'Demain · Niveau $niveau';
@@ -83,6 +83,58 @@ abstract final class Fr {
   static const positionMiseAJour = 'Votre position est mise à jour toutes les 2 minutes.';
   static const retour = 'Retour';
   static String ouiNon(bool value) => value ? oui : non;
+
+  // M5 — Alertes
+  static const voirConsignes = 'Voir les consignes';
+  static const historique = 'Historique';
+  static const bulletinsOfficiels = 'Bulletins officiels';
+  static const bulletinsVide = "Les bulletins de la SODEXAM et de l'ONPC apparaîtront ici.";
+
+  // M6 — Profil
+  static String identite(String zone) => 'Citoyenne · $zone';
+  static const mesQuartiers = 'Mes quartiers';
+  static const modifier = 'Modifier';
+  static const canauxAlerte = "Canaux d'alerte";
+  static const notifications = 'Notifications';
+  static const email = 'E-mail';
+  static const alertesRougesToujours = "Les alertes rouges sont toujours affichées dans l'application";
+  static const maFiabilite = 'Ma fiabilité';
+  static const fiabiliteExplication =
+      'Votre score augmente quand vos réponses rejoignent celles de vos voisins.';
+  static const numerosUtiles = 'Numéros utiles';
+  static const numerosACompleter = 'À compléter avec les numéros officiels vérifiés.';
+  static const donneesPersonnelles = 'Données personnelles';
+  static const supprimerCompte = 'Supprimer mon compte';
+  static const modeDemo = 'Mode démonstration — données fictives';
+
+  // M7 — Signaler
+  static const signalerInondation = 'Signaler une inondation';
+  static const photoFacultatif = 'Photo (facultatif)';
+  static const ajouterPhoto = 'Ajouter une photo';
+  static const commentaire = 'Commentaire';
+  static const envoyerSignalement = 'Envoyer le signalement';
+  static const merciVoisins = 'Merci$nbsp! Vos voisins vont être interrogés.';
+
+  // M0 — Démarrage
+  static const nomApp = 'Hydrotic CI';
+  static const slogan = 'Prévoir, alerter et secourir face aux inondations';
+  static const creerCompte = 'Créer un compte';
+  static const dejaUnCompte = "J'ai déjà un compte";
+  // Titres de l'étape 2 (« Connexion / inscription » dans la spécification).
+  static const inscription = 'Inscription';
+  static const connexion = 'Connexion';
+  static const autorisations = 'Autorisations';
+  static const champEmail = 'E-mail';
+  static const champMotDePasse = 'Mot de passe';
+  // Libellé non fourni par la spécification : bouton de passage à l'étape suivante.
+  static const continuer = 'Continuer';
+  static const quelsQuartiers = 'Quels quartiers voulez-vous suivre$nbsp?';
+  static const autorisationNotifications =
+      'Pour recevoir les alertes de vos quartiers, même application fermée.';
+  static const localisation = 'Localisation';
+  static const autorisationLocalisation =
+      'Uniquement pour signaler, confirmer une inondation ou envoyer un SOS.';
+  static const commencer = 'Commencer';
 
   // Actions non branchées
   static const bientot = 'Disponible dans une prochaine version';

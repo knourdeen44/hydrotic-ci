@@ -10,7 +10,7 @@ void main() {
 }
 
 class HydroticApp extends StatefulWidget {
-  const HydroticApp({super.key, this.initialLocation = '/'});
+  const HydroticApp({super.key, this.initialLocation = '/demarrage'});
 
   /// Écran de départ (les tests ouvrent directement un écran).
   final String initialLocation;

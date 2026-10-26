@@ -17,6 +17,15 @@ class RiskCard extends StatelessWidget {
     this.height = HydroticSizes.riskCard,
   });
 
+  /// Version compacte (96 px, écran Alertes) : sans le message.
+  const RiskCard.compact({
+    super.key,
+    required this.niveau,
+    required this.surTitre,
+    required this.titre,
+  })  : message = '',
+        height = 96;
+
   final NiveauRisque niveau;
 
   /// Affiché en majuscules (« DEMAIN · NIVEAU ORANGE »).
@@ -31,7 +40,7 @@ class RiskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      label: '$surTitre. $titre. $message',
+      label: [surTitre, titre, message].where((t) => t.isNotEmpty).join('. '),
       excludeSemantics: true,
       child: SizedBox(
         height: height,
@@ -92,14 +101,16 @@ class _Layer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: HydroticText.riskTitle.copyWith(color: white),
             ),
-            const SizedBox(height: 4),
-            Flexible(
-              child: Text(
-                message,
-                overflow: TextOverflow.fade,
-                style: HydroticText.body.copyWith(color: white),
+            if (message.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  message,
+                  overflow: TextOverflow.fade,
+                  style: HydroticText.body.copyWith(color: white),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
