@@ -36,11 +36,6 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: dashboard/package-lock.json
-      - name: Comparaison des captures aux maquettes (écart de position ≤ 4 px)
-        run: |
-          python3 -m pip install --quiet pillow
-          python3 tools/comparer_maquettes.py >> "$GITHUB_STEP_SUMMARY"
-          python3 tools/comparer_maquettes.py
       - name: Critères d'acceptation vérifiables sans exécution (couleurs, réseau, textes, routes…)
         run: node tools/verifier.mjs >> "$GITHUB_STEP_SUMMARY" && node tools/verifier.mjs
       - name: Tableau de bord — lint et build
@@ -109,6 +104,12 @@ jobs:
             mobile/test/goldens/
             mobile/test/failures/
           if-no-files-found: ignore
+      - name: Comparaison des captures aux maquettes (écart de position ≤ 4 px)
+        # Sur les captures enregistrées dans le dépôt ; sautée pendant leur régénération.
+        if: ${{ (success() || failure()) && !inputs.goldens }}
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 tools/comparer_maquettes.py | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Mobile — build web
         working-directory: mobile
         # CanvasKit servi avec l'application (sinon chargé depuis www.gstatic.com).
