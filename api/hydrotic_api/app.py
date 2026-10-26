@@ -1,10 +1,11 @@
 """Application FastAPI."""
 import psycopg
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .auth import origines_autorisees, utilisateur_connecte
 from .db import get_db
+from .pluie import PluieIndisponible, pluie_zone
 
 app = FastAPI(
     title="API Hydrotic CI",
@@ -37,7 +38,8 @@ def zones(db: psycopg.Connection = Depends(get_db)) -> list[dict]:
     """Quartiers suivis (contour réel en GeoJSON quand il est connu)."""
     lignes = db.execute(
         """SELECT id, nom, commune, profil, sous_zones, svg_mobile, svg_dashboard, etiquette_dashboard,
-                  ST_AsGeoJSON(contour)::json AS contour
+                  ST_AsGeoJSON(contour, 6)::json AS contour,
+                  ST_AsGeoJSON(ST_Centroid(contour::geometry), 6)::json AS centre
            FROM zone ORDER BY id DESC"""
     ).fetchall()
     return [
@@ -51,9 +53,21 @@ def zones(db: psycopg.Connection = Depends(get_db)) -> list[dict]:
             "svgDashboard": z["svg_dashboard"],
             "etiquetteDashboard": z["etiquette_dashboard"],
             "contour": z["contour"],
+            "centre": z["centre"]["coordinates"] if z["centre"] else None,
         }
         for z in lignes
     ]
+
+
+@app.get("/api/zones/{zone_id}/pluie")
+def pluie(zone_id: str, db: psycopg.Connection = Depends(get_db)) -> dict:
+    """Pluie réelle (mm) : 4 derniers jours, aujourd'hui, 2 prochains jours (Open-Meteo)."""
+    if db.execute("SELECT 1 FROM zone WHERE id = %s", (zone_id,)).fetchone() is None:
+        raise HTTPException(404, "Zone inconnue")
+    try:
+        return pluie_zone(db, zone_id)
+    except PluieIndisponible as erreur:
+        raise HTTPException(503, str(erreur)) from erreur
 
 
 @app.get("/api/moi")

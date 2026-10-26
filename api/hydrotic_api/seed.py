@@ -14,6 +14,7 @@ from psycopg.types.json import Jsonb
 from .db import connexion
 
 FIXTURES = Path(__file__).resolve().parents[2] / "fixtures"
+OSM = Path(__file__).resolve().parent / "donnees" / "osm.geojson"
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre"]
 ANNEE_FIXTURES = 2026  # « Mercredi 17 juin » : mercredi 17 juin 2026
@@ -75,14 +76,6 @@ def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
                    ON CONFLICT (zone_id, jour) DO UPDATE SET niveau = EXCLUDED.niveau""",
                 (zone_id, aujourdhui + timedelta(days=decalage), niveau),
             )
-    # Pluie fictive (remplacée par Open-Meteo à l'étape 2) : J-4 … J+2.
-    pluie = risk["pluie"]
-    for i, (mm, prevu) in enumerate(zip(pluie["mm"], pluie["prevision"])):
-        conn.execute(
-            """INSERT INTO observation (jour, pluie_mm, prevision, source) VALUES (%s, %s, %s, 'fixtures')
-               ON CONFLICT (jour, source) DO UPDATE SET pluie_mm = EXCLUDED.pluie_mm, prevision = EXCLUDED.prevision""",
-            (aujourdhui + timedelta(days=i - 4), mm, prevu),
-        )
 
     for cle, texte in alerts["modeles"].items():
         conn.execute(
@@ -115,7 +108,21 @@ def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
                VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (id) DO NOTHING""",
             (f"sos-{i}", v["lieu"], v["personnes"], v["details"], v["statut"], Jsonb(v["svgDashboard"]), recu),
         )
+    _geometries_osm(conn)
     conn.commit()
+
+
+def _geometries_osm(conn: psycopg.Connection) -> None:
+    """Contours, tronçon et positions réels (OpenStreetMap, outils/importer_osm.py)."""
+    requetes = {
+        "zone": "UPDATE zone SET contour = ST_Multi(ST_GeomFromGeoJSON(%s))::geography WHERE id = %s",
+        "troncon": "UPDATE signalement SET troncon = ST_GeomFromGeoJSON(%s)::geography WHERE id = %s",
+        "signalement": "UPDATE signalement SET position = ST_GeomFromGeoJSON(%s)::geography WHERE id = %s",
+        "sos": "UPDATE sos SET position = ST_GeomFromGeoJSON(%s)::geography WHERE id = %s",
+    }
+    for entite in json.loads(OSM.read_text(encoding="utf-8"))["features"]:
+        proprietes = entite["properties"]
+        conn.execute(requetes[proprietes["type"]], (json.dumps(entite["geometry"]), proprietes["id"]))
 
 
 if __name__ == "__main__":
