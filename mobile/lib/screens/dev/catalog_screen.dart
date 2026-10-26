@@ -70,7 +70,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
       padding: const EdgeInsets.only(bottom: 40),
       children: [
         _Section('HydroticHeader', padded: false, actions: [
-          TextButton(onPressed: () => context.push('/theme'), child: const Text('Thème')),
+          TextButton(onPressed: () => context.push('/dev/theme'), child: const Text('Thème')),
         ]),
         HydroticHeader(
           prenom: d.citoyen.nom,

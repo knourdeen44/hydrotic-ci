@@ -65,6 +65,25 @@ abstract final class Fr {
   static const legendeSignalement = 'Signalement';
   static const legendeVous = 'Vous';
 
+  // Écran SOS (M4)
+  static const besoinAide = "Besoin d'aide$nbsp?";
+  static const maintenezBouton = 'Maintenez le bouton 3 secondes. Votre position sera transmise aux secours.';
+  static const positionTrouvee = 'Position GPS trouvée';
+  static String precision(double metres, String lieu) =>
+      'Précision ±$nbsp${metres.round()}${nbsp}m · $lieu';
+  static const personnes = 'Personnes';
+  static const blesses = 'Blessés';
+  static const hauteurEau = "Hauteur d'eau";
+  static const enfantsAges = 'Enfants / âgés';
+  static const hauteurs = ['Cheville', 'Genou', 'Taille'];
+  static const envoyerParSms = "Pas d'internet$nbsp: envoyer le SOS par SMS";
+  static const sosEnvoye = 'SOS envoyé';
+  static const restezEnHauteur = 'Restez en hauteur et gardez votre téléphone allumé.';
+  static const secoursInformes = 'Les secours sont informés';
+  static const positionMiseAJour = 'Votre position est mise à jour toutes les 2 minutes.';
+  static const retour = 'Retour';
+  static String ouiNon(bool value) => value ? oui : non;
+
   // Actions non branchées
   static const bientot = 'Disponible dans une prochaine version';
 

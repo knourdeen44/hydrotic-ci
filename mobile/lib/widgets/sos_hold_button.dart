@@ -20,15 +20,21 @@ class SosHoldButton extends StatefulWidget {
   final Duration holdDuration;
 
   @override
-  State<SosHoldButton> createState() => _SosHoldButtonState();
+  State<SosHoldButton> createState() => SosHoldButtonState();
 }
 
-class _SosHoldButtonState extends State<SosHoldButton> with SingleTickerProviderStateMixin {
+/// État public : le mode démo déclenche le maintien avec [demarrerMaintien].
+class SosHoldButtonState extends State<SosHoldButton> with SingleTickerProviderStateMixin {
   late final _controller = AnimationController(vsync: this, duration: widget.holdDuration)
     ..addStatusListener((status) {
-      if (status == AnimationStatus.completed) widget.onComplete();
+      if (status != AnimationStatus.completed) return;
+      setState(() => _pressed = false);
+      widget.onComplete();
     });
   bool _pressed = false;
+
+  /// Démarre le maintien sans appui réel (mode démo) ; il se termine seul après 3 s.
+  void demarrerMaintien() => _down();
 
   void _down() {
     setState(() => _pressed = true);

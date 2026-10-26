@@ -6,6 +6,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      goldens:
+        description: Régénérer les captures de référence (golden tests) et les fournir en artefact
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -54,7 +59,29 @@ jobs:
         # Lancés même si l'analyse échoue, pour voir tous les problèmes en une fois.
         if: success() || failure()
         working-directory: mobile
-        run: flutter test
+        run: flutter test --exclude-tags golden
+      - name: Mobile — golden tests (captures M1 à M4)
+        if: (success() || failure()) && !inputs.goldens
+        working-directory: mobile
+        run: |
+          if ls test/goldens/*.png >/dev/null 2>&1; then
+            flutter test --tags golden
+          else
+            echo "Pas encore de captures de référence : lancer le workflow à la main avec « goldens »."
+          fi
+      - name: Mobile — régénération des captures
+        if: inputs.goldens
+        working-directory: mobile
+        run: flutter test --tags golden --update-goldens
+      - name: Mobile — captures et différences
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: goldens
+          path: |
+            mobile/test/goldens/
+            mobile/test/failures/
+          if-no-files-found: ignore
       - name: Mobile — build web
         working-directory: mobile
         run: flutter build web --release --base-href $BASE/app/

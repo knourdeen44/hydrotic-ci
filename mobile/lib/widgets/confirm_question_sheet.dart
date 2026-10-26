@@ -9,10 +9,10 @@ import 'hydrotic_sheet.dart';
 
 /// Contenu de l'état « Merci » après une réponse.
 class MerciContenu {
-  const MerciContenu({required this.message, required this.metaGauche, required this.metaDroite});
+  const MerciContenu({this.message, required this.metaGauche, required this.metaDroite});
 
-  /// Texte riche (« Rue Ministre : **inondation confirmée** par 8 habitants… »).
-  final InlineSpan message;
+  /// Texte riche (« Rue Ministre : **inondation confirmée** par 8 habitants… ») ; facultatif.
+  final InlineSpan? message;
   final String metaGauche;
   final String metaDroite;
 }
@@ -120,9 +120,11 @@ class ConfirmQuestionSheet extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: HydroticSpacing.gapM),
-        Text.rich(merci.message, style: HydroticText.caption.copyWith(color: HydroticColors.grayLight)),
-        const SizedBox(height: 14),
+        if (merci.message case final message?) ...[
+          const SizedBox(height: HydroticSpacing.gapM),
+          Text.rich(message, style: HydroticText.caption.copyWith(color: HydroticColors.grayLight)),
+          const SizedBox(height: 14),
+        ],
         _Meta(gauche: merci.metaGauche, droite: merci.metaDroite),
       ],
     );

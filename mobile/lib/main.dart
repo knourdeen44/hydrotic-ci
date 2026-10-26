@@ -2,24 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'screens/dev/catalog_screen.dart';
-import 'screens/dev/theme_preview_screen.dart';
+import 'router.dart';
 import 'theme/hydrotic_theme.dart';
 
 void main() {
   runApp(const ProviderScope(child: HydroticApp()));
 }
 
-// Navigation provisoire : catalogue de composants jusqu'à l'étape 5 (écrans M0 à M7).
-final _router = GoRouter(
-  routes: [
-    GoRoute(path: '/', builder: (context, state) => const CatalogScreen()),
-    GoRoute(path: '/theme', builder: (context, state) => const ThemePreviewScreen()),
-  ],
-);
+class HydroticApp extends StatefulWidget {
+  const HydroticApp({super.key, this.initialLocation = '/'});
 
-class HydroticApp extends StatelessWidget {
-  const HydroticApp({super.key});
+  /// Écran de départ (les tests ouvrent directement un écran).
+  final String initialLocation;
+
+  @override
+  State<HydroticApp> createState() => _HydroticAppState();
+}
+
+class _HydroticAppState extends State<HydroticApp> {
+  late final GoRouter _router = createRouter(initialLocation: widget.initialLocation);
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

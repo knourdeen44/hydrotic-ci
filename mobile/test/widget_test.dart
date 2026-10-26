@@ -1,22 +1,18 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hydrotic_ci/data/providers.dart';
-import 'package:hydrotic_ci/main.dart';
 
-import 'support/file_asset_bundle.dart';
+import 'support/pump_app.dart';
 
 void main() {
-  testWidgets('le catalogue affiche les composants avec les données fictives', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [fixtureLoaderProvider.overrideWithValue(testFixtureLoader())],
-      child: const HydroticApp(),
-    ));
-    await tester.pump();
-    await tester.pumpAndSettle();
+  testWidgets("l'application s'ouvre sur l'accueil", (tester) async {
+    await pumpApp(tester, '/');
     expect(find.text('Bonjour Awa'), findsOneWidget);
-    expect(find.text('2 zones'), findsOneWidget);
+    expect(find.text('Risque élevé'), findsOneWidget);
+  });
+
+  testWidgets('le catalogue de développement reste accessible', (tester) async {
+    await pumpApp(tester, '/dev/catalogue');
+    expect(find.text('HydroticHeader'), findsOneWidget);
     // Laisse expirer les minuteries éventuelles (bannière de notification).
-    await tester.pump(const Duration(seconds: 4));
-    await tester.pumpAndSettle();
+    await avancer(tester, const Duration(seconds: 4));
   });
 }
