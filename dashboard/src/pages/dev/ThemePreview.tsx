@@ -1,4 +1,5 @@
 import logo from '../../assets/logo_hydrotic_icon.png'
+import DataPreview from './DataPreview'
 import styles from './ThemePreview.module.css'
 
 // Page de développement (étape 2) : aperçu des variables générées dans tokens.css.
@@ -52,6 +53,8 @@ export default function ThemePreview() {
         <p className={styles.panelTitle}>panelTitle 14/700</p>
         <p>body 12/400</p>
       </section>
+
+      <DataPreview />
     </main>
   )
 }

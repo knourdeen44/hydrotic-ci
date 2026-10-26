@@ -58,6 +58,24 @@
   font-weight: var(--text-dash-panel-title-weight);
 }
 
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px var(--space-gap-m) 6px 0;
+  border-top: 1px solid var(--color-slate-light);
+}
+
+.table th {
+  white-space: nowrap;
+  font-weight: var(--text-dash-nav-active-weight);
+}
+
 .kpi {
   font-size: var(--text-dash-kpi-value-size);
   font-weight: var(--text-dash-kpi-value-weight);
