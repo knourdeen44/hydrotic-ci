@@ -55,7 +55,8 @@ class _Action extends StatelessWidget {
           onTap: onTap,
           customBorder: shape,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+            // 10 / 6 px du prototype + 1 px de bordure (comptée dans la hauteur en CSS).
+            padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 7),
             child: Column(
               children: [
                 // L'icône remplace le carré gris de 26 px du prototype.

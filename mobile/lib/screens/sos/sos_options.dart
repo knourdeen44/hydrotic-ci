@@ -111,7 +111,8 @@ class _Option extends StatelessWidget {
             onTap: onTap,
             customBorder: shape,
             child: Padding(
-              padding: const EdgeInsets.all(9),
+              // 9 px du prototype + 1 px de bordure (comptée dans la hauteur en CSS).
+              padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
