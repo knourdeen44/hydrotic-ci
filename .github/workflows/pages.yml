@@ -23,7 +23,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Version fixe : captures de référence stables, et Playwright ne gère pas encore Ubuntu 26.04.
+    runs-on: ubuntu-24.04
     env:
       BASE: /${{ github.event.repository.name }}
     steps:
@@ -122,7 +123,7 @@ jobs:
     # le site reste téléchargeable dans l'artefact « github-pages » du run.
     if: github.event_name != 'pull_request' && !github.event.repository.private
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
