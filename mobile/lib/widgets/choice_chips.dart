@@ -48,12 +48,15 @@ class _Chip extends StatelessWidget {
           child: Container(
             height: HydroticSizes.touchTarget,
             padding: const EdgeInsets.symmetric(horizontal: 18),
-            alignment: Alignment.center,
-            child: Text(
-              label,
-              style: HydroticText.body.copyWith(
-                fontWeight: FontWeight.w600,
-                color: actif ? HydroticColors.white : HydroticColors.slateDark,
+            // widthFactor : la puce garde la largeur de son texte.
+            child: Center(
+              widthFactor: 1,
+              child: Text(
+                label,
+                style: HydroticText.body.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: actif ? HydroticColors.white : HydroticColors.slateDark,
+                ),
               ),
             ),
           ),

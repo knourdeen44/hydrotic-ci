@@ -31,7 +31,12 @@ abstract final class HydroticTheme {
       switchTheme: SwitchThemeData(
         thumbColor: const WidgetStatePropertyAll(HydroticColors.white),
         trackColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.selected) ? HydroticColors.slate : HydroticColors.slateLight,
+          (states) => switch ((states.contains(WidgetState.selected), states.contains(WidgetState.disabled))) {
+            // Interrupteur non modifiable (ex. alertes rouges) : estompé.
+            (true, true) => HydroticColors.slate.withValues(alpha: .5),
+            (true, false) => HydroticColors.slate,
+            (false, _) => HydroticColors.slateLight,
+          },
         ),
         trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       ),
