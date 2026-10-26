@@ -33,6 +33,7 @@ class _Step extends StatelessWidget {
   final bool aVenir;
 
   static const _fondu = Duration(milliseconds: 300);
+  static const double _hauteurLigneTitre = 16 * 1.21 / 14;
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +72,9 @@ class _Step extends StatelessWidget {
                   etape.etape,
                   style: HydroticText.button.copyWith(
                     color: aVenir ? HydroticColors.grayLight : HydroticColors.gray,
+                    // Prototype : titre 14 px dans une ligne de 16 px (taille par défaut du parent).
+                    height: _hauteurLigneTitre,
+                    leadingDistribution: TextLeadingDistribution.proportional,
                   ),
                 ),
                 if (etape.detail.isNotEmpty)
