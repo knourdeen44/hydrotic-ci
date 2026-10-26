@@ -20,7 +20,19 @@ thème généré depuis `design/tokens.json` et à jour (§5, `gen_tokens --chec
 
 ## Écarts de position avec les maquettes
 
-<!-- RESULTATS_COMPARAISON -->
+Mesure de `tools/comparer_maquettes.py` : bandes de texte et d'éléments repérées de haut en bas
+dans la maquette et dans la capture (taille logique 340 × 720 pour le mobile, 1440 × 880 pour D1),
+puis décalage vertical de chaque bande appariée. Tolérance : 4 px.
+
+| Écran | Bandes appariées | Écart max (px) | Écart moyen (px) | État | Remarque |
+|---|---|---|---|---|---|
+| M1 Accueil | 7 / 7 | 2 | 0.7 | ✅ |  |
+| M1 Accueil (planche) | 7 / 8 | 7 | 4.7 | ℹ️ | indicatif : carte de risque de hauteur automatique (≈ 140 px) sur la planche, 148 px dans les vidéos et tokens.json |
+| M2 Alerte (fin) | 12 / 12 | 2 | 0.9 | ✅ |  |
+| M4 SOS (repos) | 8 / 8 | 4 | 0.8 | ✅ |  |
+| M4 SOS (envoyé) | 8 / 8 | 3 | 1.5 | ✅ |  |
+| M3 Carte (légende) | 3 / 3 | 3 | 3.0 | ✅ | feuille au-dessus de la barre du bas (choix validé) : seule la partie haute est comparée |
+| D1 Vue d’ensemble | 9 / 10 | 2 | 0.6 | ✅ |  |
 
 ## Écarts assumés (décisions prises pendant la phase 1)
 
@@ -47,6 +59,11 @@ thème généré depuis `design/tokens.json` et à jour (§5, `gen_tokens --chec
   et la police par défaut du moteur web (« Roboto ») est déclarée localement avec les fichiers Inter.
 - Test du scénario 2 ajouté (minutage pop / feuille / « Oui » / merci).
 - Test des 13 textes composés comparés aux citations de la spécification.
+- Hauteur de ligne : le navigateur arrondit au pixel l'ascendante et la descendante de la police
+  pour chaque taille (12 px → 15 px de ligne). `tokens.json` décrit désormais les métriques d'Inter
+  et `gen_tokens` calcule la hauteur de chaque style mobile de la même façon (écart moyen sur M1 :
+  2,0 → 0,7 px ; M4 « SOS envoyé » : 13 → 3 px).
+- Frise de suivi du SOS : titre d'étape dans une ligne de 16 px, comme le prototype.
 
 ## Relancer la vérification
 
