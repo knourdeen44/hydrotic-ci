@@ -148,6 +148,15 @@ abstract final class Fr {
   static const jeSuisEnDanger = 'Je suis en danger';
   static String ilYAHeures(int h) => 'il y a $h${nbsp}h';
 
+  // Mode réel (phase 2)
+  static const seDeconnecter = 'Se déconnecter';
+  static const positionGps = 'Position GPS';
+  static const positionInconnue = 'Position inconnue';
+  static const positionSignalee = 'Position signalée';
+  static const positionIndisponible = 'Position indisponible$nbsp: autorisez la localisation pour signaler.';
+  static const connexionRequise = 'Connectez-vous pour envoyer un SOS.';
+  static const attributionOsm = '© contributeurs OpenStreetMap';
+
   // Actions non branchées
   static const bientot = 'Disponible dans une prochaine version';
 

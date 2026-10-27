@@ -114,7 +114,8 @@ jobs:
       - name: Mobile — build web
         working-directory: mobile
         # CanvasKit servi avec l'application (sinon chargé depuis www.gstatic.com).
-        run: flutter build web --release --no-web-resources-cdn --base-href $BASE/app/
+        # Mode réel : API Hydrotic (connexion Clerk chargée par web/index.html).
+        run: flutter build web --release --no-web-resources-cdn --base-href $BASE/app/ --dart-define=API_URL=https://hydrotic-ci-api.vercel.app
 
       - name: Assemblage du site
         run: |

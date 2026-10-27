@@ -1,4 +1,15 @@
+import 'geo.dart';
 import 'point_svg.dart';
+
+/// SOS à envoyer (mode réel).
+typedef SosEnvoi = ({
+  int personnes,
+  bool blesses,
+  String hauteurEau,
+  bool enfantsOuAges,
+  Geo? geo,
+  double? precisionM,
+});
 
 /// Statut d'un SOS (diagramme UML : StatutSOS).
 enum StatutSos {
@@ -84,6 +95,7 @@ class SosCourant {
     required this.hauteurEau,
     required this.enfantsOuAges,
     required this.timeline,
+    this.id,
   });
 
   factory SosCourant.fromJson(Map<String, dynamic> json) => SosCourant(
@@ -106,4 +118,7 @@ class SosCourant {
   final String hauteurEau;
   final bool enfantsOuAges;
   final List<EtapeSos> timeline;
+
+  /// Identifiant du SOS envoyé (mode réel).
+  final String? id;
 }

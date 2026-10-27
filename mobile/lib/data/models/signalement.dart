@@ -1,3 +1,5 @@
+import 'confirmation.dart';
+import 'geo.dart';
 import 'point_svg.dart';
 
 /// Statut d'un signalement.
@@ -32,6 +34,9 @@ class Signalement {
     this.svgTroncon,
     this.svgEtiquette,
     this.apresOui,
+    this.geo,
+    this.estAuteur = false,
+    this.maReponse,
   });
 
   factory Signalement.fromJson(Map<String, dynamic> json) {
@@ -82,6 +87,15 @@ class Signalement {
   final PointSvg? svgEtiquette;
   final VotesApresOui? apresOui;
 
+  /// Position réelle (mode réel).
+  final Geo? geo;
+
+  /// Signalement fait par l'habitant connecté (mode réel).
+  final bool estAuteur;
+
+  /// Réponse déjà donnée par l'habitant connecté (mode réel).
+  final OuiNonInconnu? maReponse;
+
   Signalement copyWith({StatutSignalement? statut, int? oui, int? non}) => Signalement(
         id: id,
         zoneId: zoneId,
@@ -96,5 +110,8 @@ class Signalement {
         svgTroncon: svgTroncon,
         svgEtiquette: svgEtiquette,
         apresOui: apresOui,
+        geo: geo,
+        estAuteur: estAuteur,
+        maReponse: maReponse,
       );
 }

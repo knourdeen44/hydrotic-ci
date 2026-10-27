@@ -6,12 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/confirmation.dart';
 import '../../data/models/niveau_risque.dart';
 import '../../data/models/signalement.dart';
+import '../../data/mode.dart';
+import '../../data/providers.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/carte_osm.dart';
 import '../../widgets/confirm_question_sheet.dart';
 import '../../widgets/schematic_map.dart';
+import '../../widgets/toast.dart';
 import '../shell/citizen_scaffold.dart';
 import 'carte_data.dart';
 
@@ -83,6 +87,14 @@ class _CarteScreenState extends ConsumerState<CarteScreen> {
       _feuilleOuverte = true;
     });
     _plusTard(_delaiMerci, () => setState(() => _merciVisible = true));
+    if (modeApi) {
+      ref.read(reportRepositoryProvider).confirmer(actif.id, reponse).then(
+        (_) => _plusTard(_delaiCarte, () => ref.invalidate(signalementsProvider)),
+        onError: (Object e) {
+          if (mounted) showToast(context, '$e');
+        },
+      );
+    }
     _plusTard(_delaiCarte, () {
       ref.read(confirmationsProvider.notifier).update((m) => {...m, actif.id: reponse});
     });
@@ -106,7 +118,16 @@ class _CarteScreenState extends ConsumerState<CarteScreen> {
               children: [
                 GestureDetector(
                   onTap: ouverte ? _fermerFeuille : null,
-                  child: SchematicMap(
+                  child: modeApi
+                      ? CarteOsm(
+                          zones: [
+                            for (final z in d.zones) (zone: z, niveau: _niveauZone(z.id, d, confirmations)),
+                          ],
+                          signalements: d.signalements,
+                          vous: ref.watch(positionGpsProvider).valueOrNull?.geo,
+                          signalementActifId: actif?.id,
+                        )
+                      : SchematicMap(
                     zones: [
                       for (final z in d.zones)
                         (zone: z, niveau: _niveauZone(z.id, d, confirmations)),

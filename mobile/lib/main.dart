@@ -3,10 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'router.dart';
+import 'state/session.dart';
 import 'theme/hydrotic_theme.dart';
 
-void main() {
-  runApp(const ProviderScope(child: HydroticApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Mode réel : session Clerk lue avant le premier écran (connecté : accueil ; sinon : démarrage).
+  await initialiserSession();
+  runApp(ProviderScope(child: HydroticApp(initialLocation: session.value ? '/' : '/demarrage')));
 }
 
 class HydroticApp extends StatefulWidget {

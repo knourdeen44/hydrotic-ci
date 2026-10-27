@@ -6,10 +6,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/point_svg.dart';
 import '../../data/models/signalement.dart';
+import '../../data/mode.dart';
 import '../../data/providers.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
 import '../../theme/hydrotic_sizes.dart';
+import '../../widgets/carte_osm.dart';
 import '../../widgets/choice_chips.dart';
 import '../../widgets/dashed_button.dart';
 import '../../widgets/hydrotic_button.dart';
@@ -56,7 +58,11 @@ class _SignalerScreenState extends ConsumerState<SignalerScreen> {
     final reports = ref.read(reportRepositoryProvider);
     final citoyen = await ref.read(citoyenProvider.future);
     final vous = await ref.read(positionVousProvider.future);
-    await reports.ajouter(Signalement(
+    final gps = modeApi ? await ref.read(positionGpsProvider.future) : null;
+    final commentaire = _commentaire.text.trim();
+    try {
+      await reports.ajouter(
+        Signalement(
       id: 'local-${DateTime.now().microsecondsSinceEpoch}',
       zoneId: citoyen.zonesSuivies.first,
       rue: Fr.legendeSignalement,
@@ -67,7 +73,16 @@ class _SignalerScreenState extends ConsumerState<SignalerScreen> {
       // Juste à côté de la position « Vous » (pas de géolocalisation en phase 1).
       position: PointSvg(vous.x + 20, vous.y - 20),
       hauteurEau: _hauteur,
-    ));
+      geo: gps?.geo,
+        ),
+        commentaire: commentaire.isEmpty ? null : commentaire,
+      );
+    } on Exception catch (e) {
+      if (!mounted) return;
+      setState(() => _envoi = false);
+      showToast(context, '$e');
+      return;
+    }
     if (!mounted) return;
     ref.invalidate(signalementsProvider);
     showToast(context, Fr.merciVoisins);
@@ -96,7 +111,16 @@ class _SignalerScreenState extends ConsumerState<SignalerScreen> {
                     height: _hauteurCarte,
                     child: d == null
                         ? const SizedBox.shrink()
-                        : LayoutBuilder(
+                        : modeApi
+                            ? CarteOsm(
+                                interactive: false,
+                                zones: [
+                                  for (final z in d.zones) (zone: z, niveau: d.niveauxAujourdhui[z.id]!),
+                                ],
+                                signalements: d.signalements,
+                                vous: ref.watch(positionGpsProvider).valueOrNull?.geo,
+                              )
+                            : LayoutBuilder(
                             builder: (context, c) => SchematicMap(
                               showLegend: false,
                               animateActif: false,

@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/api/navigateur.dart';
+import '../../data/mode.dart';
 import '../../data/models/sos.dart';
+import '../../data/providers.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
+import '../../state/session.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../theme/hydrotic_text.dart';
@@ -42,6 +46,10 @@ class _SosScreenState extends ConsumerState<SosScreen> {
   bool _info = false;
   SosOptionsValeurs? _options;
 
+  /// Mode réel : suivi du SOS envoyé, rafraîchi toutes les 15 s.
+  SosCourant? _suivi;
+  Timer? _sondage;
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +63,7 @@ class _SosScreenState extends ConsumerState<SosScreen> {
     for (final t in _timers) {
       t.cancel();
     }
+    _sondage?.cancel();
     super.dispose();
   }
 
@@ -63,9 +72,52 @@ class _SosScreenState extends ConsumerState<SosScreen> {
       }));
 
   void _maintienTermine() {
+    if (modeApi) {
+      unawaited(_envoyerReel());
+      return;
+    }
     _plusTard(_delaiEnvoi, () => setState(() => _envoye = true));
     _plusTard(_delaiEnvoi + _delaiEquipe, () => setState(() => _equipeEnRoute = true));
     _plusTard(_delaiEnvoi + _delaiInfo, () => setState(() => _info = true));
+  }
+
+  /// Mode réel : connexion si besoin, envoi avec la position GPS, puis suivi.
+  Future<void> _envoyerReel() async {
+    final repo = ref.read(sosRepositoryProvider);
+    final brouillon = ref.read(sosCourantProvider).valueOrNull;
+    if (!session.value) session.value = await Navigateur.connecter(inscription: false);
+    if (!session.value) {
+      if (mounted) showToast(context, Fr.connexionRequise);
+      return;
+    }
+    final options = _options ?? (brouillon == null ? null : SosOptionsValeurs.depuis(brouillon));
+    final gps = await ref.read(positionGpsProvider.future);
+    try {
+      final suivi = await repo.envoyer((
+        personnes: options?.personnes ?? 1,
+        blesses: options?.blesses ?? false,
+        hauteurEau: options?.hauteurEau ?? Fr.hauteurs.first,
+        enfantsOuAges: options?.enfantsOuAges ?? false,
+        geo: gps?.geo,
+        precisionM: gps?.precisionM,
+      ));
+      if (!mounted) return;
+      setState(() {
+        _suivi = suivi;
+        _envoye = true;
+        _info = true;
+      });
+      _sondage = Timer.periodic(const Duration(seconds: 15), (_) async {
+        try {
+          final maj = await repo.suivre(suivi.id!);
+          if (mounted) setState(() => _suivi = maj);
+        } on Exception {
+          // Réseau indisponible : nouvel essai au passage suivant.
+        }
+      });
+    } on Exception catch (e) {
+      if (mounted) showToast(context, '$e');
+    }
   }
 
   void _retour() {
@@ -94,7 +146,8 @@ class _SosScreenState extends ConsumerState<SosScreen> {
                     duration: const Duration(milliseconds: 450),
                     child: _envoye
                         ? SosSentView(
-                            etapes: [
+                            etapes: _suivi?.timeline ??
+                                [
                               // L'étape « Équipe en route » se coche 2,4 s après l'envoi (simulation).
                               for (final (i, e) in sos.timeline.indexed)
                                 EtapeSos(etape: e.etape, detail: e.detail, fait: i == 0 || (_equipeEnRoute && e.fait)),

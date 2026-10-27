@@ -26,7 +26,6 @@ final accueilProvider = FutureProvider<AccueilDonnees>((ref) async {
   final suiviesF = ref.watch(zonesSuiviesProvider.future);
   final zonesF = ref.watch(zonesProvider.future);
   final niveauxF = ref.watch(niveauxProvider.future);
-  final pluieF = ref.watch(pluieProvider.future);
   final risk = ref.watch(riskRepositoryProvider);
 
   final citoyen = await citoyenF;
@@ -43,6 +42,6 @@ final accueilProvider = FutureProvider<AccueilDonnees>((ref) async {
         : '${zone.nom} · ${zone.commune}',
     niveaux: await niveauxF,
     risque: await risk.risqueZone(zoneId),
-    pluie: await pluieF,
+    pluie: await risk.pluie(zoneId),
   );
 });

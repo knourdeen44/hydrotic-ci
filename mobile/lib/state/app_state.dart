@@ -9,6 +9,7 @@ import '../data/models/signalement.dart';
 import '../data/models/sos.dart';
 import '../data/models/utilisateur.dart';
 import '../data/models/zone.dart';
+import '../data/mode.dart';
 import '../data/providers.dart';
 
 // État partagé des écrans. Les dépôts sont lus avant tout `await` (dépendances synchrones).
@@ -63,6 +64,8 @@ final signalementsProvider = FutureProvider<List<Signalement>>((ref) async {
   final repo = ref.watch(reportRepositoryProvider);
   final confirmations = ref.watch(confirmationsProvider);
   final signalements = await repo.signalements();
+  // Mode réel : votes et réponses déjà à jour côté serveur.
+  if (modeApi) return signalements;
   return [for (final s in signalements) appliquerReponse(s, confirmations[s.id])];
 });
 

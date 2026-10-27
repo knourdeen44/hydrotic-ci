@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'data/mode.dart';
 import 'screens/accueil/accueil_screen.dart';
 import 'screens/alertes/alertes_screen.dart';
 import 'screens/carte/carte_screen.dart';
@@ -11,6 +12,7 @@ import 'screens/dev/theme_preview_screen.dart';
 import 'screens/profil/profil_screen.dart';
 import 'screens/signaler/signaler_screen.dart';
 import 'screens/sos/sos_screen.dart';
+import 'state/session.dart';
 
 /// Scénario de démonstration demandé dans l'adresse (`?demo=alerte|confirmation|sos`),
 /// lancé depuis le menu caché du mode démo.
@@ -22,9 +24,18 @@ Key _cle(GoRouterState state) => ValueKey(state.uri.toString());
 /// Onglets : pas d'animation de transition entre écrans principaux.
 Page<void> _onglet(GoRouterState state, Widget child) => NoTransitionPage(key: state.pageKey, child: child);
 
+/// Mode réel : connexion obligatoire, sauf démarrage, SOS (connexion demandée à l'envoi) et démo.
+String? _exigerConnexion(GoRouterState state) {
+  if (!modeApi || session.value) return null;
+  const libres = ['/demarrage', '/sos', '/demo', '/dev'];
+  return libres.any(state.uri.path.startsWith) ? null : '/demarrage';
+}
+
 /// L'application s'ouvre sur le démarrage (M0) ; « Commencer » mène à l'accueil.
 GoRouter createRouter({String initialLocation = '/demarrage'}) => GoRouter(
       initialLocation: initialLocation,
+      refreshListenable: session,
+      redirect: (context, state) => _exigerConnexion(state),
       routes: [
         GoRoute(
           path: '/',

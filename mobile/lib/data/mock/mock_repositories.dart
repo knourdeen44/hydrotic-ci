@@ -1,4 +1,5 @@
 import '../models/alerte.dart';
+import '../models/confirmation.dart';
 import '../models/niveau_risque.dart';
 import '../models/point_svg.dart';
 import '../models/risque.dart';
@@ -50,7 +51,7 @@ class MockRiskRepository implements RiskRepository {
   }
 
   @override
-  Future<List<PluieJour>> pluie() async {
+  Future<List<PluieJour>> pluie([String? zoneId]) async {
     final pluie = (await _risk)['pluie'] as _Json;
     final labels = (pluie['labels'] as List).cast<String>();
     final mm = (pluie['mm'] as List).cast<num>();
@@ -113,7 +114,10 @@ class MockReportRepository implements ReportRepository {
   }
 
   @override
-  Future<void> ajouter(Signalement signalement) async => _ajouts.add(signalement);
+  Future<void> ajouter(Signalement signalement, {String? commentaire}) async => _ajouts.add(signalement);
+
+  @override
+  Future<void> confirmer(String signalementId, OuiNonInconnu reponse) async {}
 }
 
 class MockSosRepository implements SosRepository {
@@ -132,6 +136,12 @@ class MockSosRepository implements SosRepository {
     final json = await _fixtures.load('sos');
     return [for (final s in json['liste'] as List) Sos.fromJson(s as _Json)];
   }
+
+  @override
+  Future<SosCourant> envoyer(SosEnvoi envoi) => sosCourant();
+
+  @override
+  Future<SosCourant> suivre(String id) => sosCourant();
 }
 
 class MockUserRepository implements UserRepository {
@@ -146,4 +156,7 @@ class MockUserRepository implements UserRepository {
   @override
   Future<Utilisateur> agent() async =>
       Utilisateur.fromJson((await _fixtures.load('user'))['agent'] as _Json);
+
+  @override
+  Future<void> enregistrer({List<String>? zonesSuivies, Set<Canal>? canaux}) async {}
 }

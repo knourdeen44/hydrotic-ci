@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/api/navigateur.dart';
+import '../../data/mode.dart';
+import '../../data/providers.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
+import '../../state/session.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../theme/hydrotic_text.dart';
@@ -41,11 +45,28 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
 
   void _validerQuartiers(List<String> quartiers) {
     ref.read(choixZonesProvider.notifier).state = quartiers;
+    if (modeApi) ref.read(userRepositoryProvider).enregistrer(zonesSuivies: quartiers).ignore();
     if (widget.depuisProfil) {
       _retourProfil();
     } else {
       _aller(EtapeDemarrage.autorisations);
     }
+  }
+
+  /// Mode réel : fenêtre de connexion Clerk ; mode démo : formulaire sans vérification.
+  Future<void> _connexion({required bool inscription}) async {
+    if (!modeApi) {
+      setState(() {
+        _inscription = inscription;
+        _etape = EtapeDemarrage.connexion;
+      });
+      return;
+    }
+    final connecte = await Navigateur.connecter(inscription: inscription);
+    if (!mounted || !connecte) return;
+    session.value = true;
+    ref.invalidate(citoyenProvider);
+    _aller(EtapeDemarrage.quartiers);
   }
 
   void _retourProfil() {
@@ -97,7 +118,14 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
         return DemarrageEtape(
           titre: Fr.autorisations,
           onBack: () => _aller(EtapeDemarrage.quartiers),
-          bouton: HydroticButton(label: Fr.commencer, onPressed: () => context.go('/')),
+          bouton: HydroticButton(
+            label: Fr.commencer,
+            onPressed: () {
+              // Mode réel : demande d'autorisation de localisation du navigateur.
+              if (modeApi && _localisation) ref.read(positionGpsProvider.future).ignore();
+              context.go('/');
+            },
+          ),
           children: [
             CarteAutorisation(
               icon: Icons.notifications_rounded,
@@ -139,19 +167,13 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
           const SizedBox(height: 32),
           HydroticButton(
             label: Fr.creerCompte,
-            onPressed: () => setState(() {
-              _inscription = true;
-              _etape = EtapeDemarrage.connexion;
-            }),
+            onPressed: () => _connexion(inscription: true),
           ),
           const SizedBox(height: HydroticSpacing.gapM),
           HydroticButton(
             label: Fr.dejaUnCompte,
             secondary: true,
-            onPressed: () => setState(() {
-              _inscription = false;
-              _etape = EtapeDemarrage.connexion;
-            }),
+            onPressed: () => _connexion(inscription: false),
           ),
         ],
       ),
@@ -164,7 +186,9 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
     final choix = _quartiers ?? suivies;
     return DemarrageEtape(
       titre: Fr.quelsQuartiers,
-      onBack: widget.depuisProfil ? _retourProfil : () => _aller(EtapeDemarrage.connexion),
+      onBack: widget.depuisProfil
+          ? _retourProfil
+          : () => _aller(modeApi ? EtapeDemarrage.bienvenue : EtapeDemarrage.connexion),
       bouton: HydroticButton(
         label: Fr.continuer,
         onPressed: choix.isEmpty ? null : () => _validerQuartiers(choix),

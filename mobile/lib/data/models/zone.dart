@@ -1,3 +1,5 @@
+import 'geo.dart';
+
 /// Quartier suivi (diagramme UML : Zone).
 class Zone {
   const Zone({
@@ -8,6 +10,8 @@ class Zone {
     required this.sousZones,
     required this.svgMobile,
     required this.svgDashboard,
+    this.contour = const [],
+    this.centre,
   });
 
   factory Zone.fromJson(Map<String, dynamic> json) => Zone(
@@ -18,7 +22,26 @@ class Zone {
         sousZones: (json['sousZones'] as List).cast<String>(),
         svgMobile: json['svgMobile'] as String,
         svgDashboard: json['svgDashboard'] as String,
+        contour: _contour(json['contour']),
+        centre: switch (json['centre']) {
+          [final num lon, final num lat] => (lat: lat.toDouble(), lon: lon.toDouble()),
+          _ => null,
+        },
       );
+
+  /// Anneaux extérieurs d'un contour GeoJSON (Polygon ou MultiPolygon, API).
+  static List<List<Geo>> _contour(Object? geojson) {
+    if (geojson is! Map<String, dynamic>) return const [];
+    final coordonnees = geojson['coordinates'] as List;
+    final polygones = geojson['type'] == 'Polygon' ? [coordonnees] : coordonnees;
+    return [
+      for (final p in polygones)
+        [
+          for (final c in (p as List).first as List)
+            (lat: ((c as List)[1] as num).toDouble(), lon: (c[0] as num).toDouble()),
+        ],
+    ];
+  }
 
   final String id;
   final String nom;
@@ -31,4 +54,8 @@ class Zone {
 
   /// Contour schématique (chemin SVG) pour la carte du tableau de bord.
   final String svgDashboard;
+
+  /// Contour OpenStreetMap (mode réel) ; vide avec les fixtures.
+  final List<List<Geo>> contour;
+  final Geo? centre;
 }

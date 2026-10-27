@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/api/navigateur.dart';
+import '../../data/mode.dart';
 import '../../data/models/utilisateur.dart';
+import '../../data/providers.dart';
 import '../../data/models/zone.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
+import '../../state/session.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../theme/hydrotic_text.dart';
@@ -51,8 +55,11 @@ class ProfilScreen extends ConsumerWidget {
   ) {
     String nom(String id) => d.zones.firstWhere((z) => z.id == id).nom;
     final canaux = ref.watch(canauxProvider) ?? d.citoyen.canauxPreferes;
-    void basculer(Canal canal, bool actif) => ref.read(canauxProvider.notifier).state =
-        actif ? {...canaux, canal} : canaux.difference({canal});
+    void basculer(Canal canal, bool actif) {
+      final choix = actif ? {...canaux, canal} : canaux.difference({canal});
+      ref.read(canauxProvider.notifier).state = choix;
+      if (modeApi) ref.read(userRepositoryProvider).enregistrer(canaux: choix).ignore();
+    }
     final principale = d.citoyen.zonesSuivies.first;
 
     return ListView(
@@ -128,10 +135,19 @@ class ProfilScreen extends ConsumerWidget {
           onPressed: () => showToast(context, Fr.bientot),
         ),
         const SizedBox(height: HydroticSpacing.dashGap),
-        const _BandeauDemo(),
+        if (modeApi)
+          HydroticButton(label: Fr.seDeconnecter, secondary: true, onPressed: () => _deconnecter(context))
+        else
+          const _BandeauDemo(),
       ],
     );
   }
+}
+
+Future<void> _deconnecter(BuildContext context) async {
+  await Navigateur.deconnecter();
+  session.value = false;
+  if (context.mounted) context.go('/demarrage');
 }
 
 class _Identite extends StatelessWidget {
