@@ -17,8 +17,9 @@ def test_migrations_et_donnees_idempotentes():
     with psycopg.connect(URL, row_factory=psycopg.rows.dict_row) as c:
         assert migrer(c) == []
         peupler(c)
-        assert c.execute("SELECT count(*) AS n FROM alerte").fetchone()["n"] == 3
-        assert c.execute("SELECT count(*) AS n FROM sos").fetchone()["n"] == 4
+        # Données de départ (d'autres tests ajoutent des alertes et des SOS).
+        assert c.execute("SELECT count(*) AS n FROM alerte WHERE id IN ('al-1', 'al-2', 'al-3')").fetchone()["n"] == 3
+        assert c.execute("SELECT count(*) AS n FROM sos WHERE id LIKE 'sos-%'").fetchone()["n"] == 4
         assert c.execute("SELECT count(*) AS n FROM consigne WHERE niveau = 'orange'").fetchone()["n"] == 3
 
 

@@ -28,7 +28,7 @@ def test_contours_et_positions_osm_dans_leur_quartier():
                WHERE NOT ST_Within(s.position::geometry, z.contour::geometry)"""
         ).fetchall()
         assert hors == []
-        assert c.execute("SELECT count(*) AS n FROM sos WHERE position IS NULL").fetchone()["n"] == 0
+        assert c.execute("SELECT count(*) AS n FROM sos WHERE id LIKE 'sos-%' AND position IS NULL").fetchone()["n"] == 0
         troncon = c.execute("SELECT ST_Length(troncon) AS m FROM signalement WHERE id = 'sg-1'").fetchone()["m"]
         assert 50 < troncon < 600
 
