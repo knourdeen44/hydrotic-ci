@@ -19,10 +19,12 @@ const ecrans = [
 
 const HOTES = [
   'hydrotic-ci-api.vercel.app',
-  'clerk.accounts.dev',
-  'img.clerk.com',
+  // Connexion Clerk (instance de développement) : API, portail, images, protection anti-robots, télémétrie.
+  'accounts.dev',
+  'clerk.com',
   'clerk-telemetry.com',
-  'challenges.cloudflare.com', // protection anti-robots de Clerk
+  'challenges.cloudflare.com',
+  'ingest.us.sentry.io', // remontée d'erreurs de la protection anti-robots de Clerk
   'tile.openstreetmap.org',
 ]
 const autorise = (url) => {
