@@ -148,7 +148,7 @@ Avance **étape par étape**, et **arrête-toi à la fin de chaque étape** pour
 - [ ] Comparaison visuelle avec les captures de `design/reference/screens/` : mêmes couleurs, textes, ordre des éléments ; écart de position inférieur à ~4 px sur un écran de 360 × 740.
 - [ ] Les 4 scénarios des vidéos `design/reference/videos/` se rejouent à l'identique (enchaînement et durées approximatives).
 - [ ] Aucune couleur en dur ; `grep` des codes hexadécimaux hors fichiers générés = 0 résultat.
-- [ ] Aucun appel réseau (`http`, `fetch`, `dio`…) dans le code.
+- [ ] Réseau (phase 2) : appels seulement depuis les clients d'API (`dashboard/src/data/api/`, `mobile/lib/data/api/`), vers les hôtes autorisés (API Hydrotic, Clerk, tuiles OpenStreetMap). Mode démo : aucun appel.
 - [ ] `flutter analyze` sans erreur ; `flutter test` passe (tests de widgets + golden tests des écrans M1 à M4).
 - [ ] `npm run lint`, `npm run build` et les tests Playwright passent ; capture de D1 à 1440 × 880 comparée à `02_dashboard_vue_ensemble.png`.
 - [ ] Tous les textes en français, identiques à la spécification.
@@ -183,3 +183,5 @@ node tools/gen_tokens.mjs                               # régénérer thème Fl
 ## 11. Phases suivantes (hors périmètre, pour information)
 
 Phase 2 : API FastAPI + PostgreSQL/PostGIS, carte réelle (Leaflet / flutter_map + OpenStreetMap), authentification. Phase 3 : moteur d'alertes (Firebase Cloud Messaging, e-mail), confirmation communautaire réelle, SOS réel. Phase 4 : modèle d'IA de prévision. Le code de la phase 1 doit permettre de remplacer les dépôts « mock » par des dépôts API **sans toucher aux écrans**.
+
+**Phase 2 (faite)** : API FastAPI sur Vercel + Neon (PostGIS), connexion Clerk, contours OpenStreetMap, pluie Open-Meteo, carte Leaflet / flutter_map, GPS, signalements, confirmations et SOS partagés. Mode réel par défaut sur le site publié ; mode démo (fixtures) pour les tests, les captures et les scénarios (bascule : Ctrl + D sur le tableau de bord).

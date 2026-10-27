@@ -10,7 +10,7 @@ est contrôlé et le **résultat** au moment de la livraison.
 | 2 | Comparaison visuelle avec `design/reference/screens/` : écart de position < ~4 px | ✅ voir tableau ci-dessous | `tools/comparer_maquettes.py` (mobile et D1) ; test Playwright `@reference` (D1 au pixel, tolérance 4 %) |
 | 3 | Les 4 scénarios des vidéos se rejouent (enchaînement, durées approximatives) | ✅ | Scénarios 1 à 3 : `test/screens/screens_test.dart`, `demo_test.dart` (minutage du prototype) ; scénario 4 : `tests/demo.spec.ts` (horloge simulée) |
 | 4 | Aucune couleur en dur (hors fichiers générés) | ✅ 0 occurrence | `tools/verifier.mjs` (hexadécimal, `rgb()`, `Color(0x…)`, `Colors.*` sauf `transparent`) |
-| 5 | Aucun appel réseau | ✅ | `tools/verifier.mjs` (code) ; `tools/verifier_web.mjs` (16 écrans du site compilé, aucune requête externe) ; Playwright (requêtes du tableau de bord) |
+| 5 | Réseau maîtrisé (phase 2) | ✅ | `tools/verifier.mjs` : appels seulement dans les clients d'API, hôtes autorisés (API Hydrotic, Clerk, OpenStreetMap) ; `tools/verifier_web.mjs` : 16 écrans du site compilé, aucune requête hors liste ; mode démo sans appel (Playwright) |
 | 6 | `flutter analyze` sans erreur ; `flutter test` passe (widgets + golden tests M1 à M4) | ✅ | Étapes « Mobile — analyse / tests / golden tests » |
 | 7 | `npm run lint`, `npm run build`, Playwright ; capture de D1 à 1440 × 880 comparée à la référence | ✅ | Étapes « Tableau de bord — … » |
 | 8 | Textes en français, identiques à la spécification | ✅ 122 / 122 citations | `tools/verifier.mjs` : 109 citations présentes telles quelles dans les textes ou les données, 13 composées à l'exécution et comparées mot pour mot par `test/spec_textes_test.dart` |
