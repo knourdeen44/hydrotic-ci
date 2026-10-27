@@ -11,7 +11,7 @@ const ARRIVEE_SOS = 1500
 const VALIDATION_ALERTE = 4850
 const PRISE_EN_CHARGE = 7200
 // Mode réel : rafraîchissement des SOS (« temps réel »).
-const RAFRAICHISSEMENT_MS = 15000
+const RAFRAICHISSEMENT_MS = 5000
 
 export default function EtatProvider({ children }: { children: ReactNode }) {
   const [initiaux, setInitiaux] = useState<Sos[]>()
@@ -30,7 +30,9 @@ export default function EtatProvider({ children }: { children: ReactNode }) {
 
   const recharger = useCallback(async () => {
     try {
-      setInitiaux(await repositories.sos.liste())
+      const liste = await repositories.sos.liste()
+      // Mode réel : les SOS déjà secourus quittent la liste, la carte et le badge.
+      setInitiaux(MODE === 'api' ? liste.filter((s) => s.statut !== 'SECOURU') : liste)
       if (MODE === 'api') setModifies(undefined)
     } catch {
       if (MODE === 'api') toast(fr.erreurChargement)
@@ -41,7 +43,15 @@ export default function EtatProvider({ children }: { children: ReactNode }) {
     void recharger()
     if (MODE !== 'api') return
     const id = window.setInterval(() => void recharger(), RAFRAICHISSEMENT_MS)
-    return () => window.clearInterval(id)
+    // Retour sur l'onglet : mise à jour immédiate.
+    const auRetour = () => {
+      if (document.visibilityState === 'visible') void recharger()
+    }
+    document.addEventListener('visibilitychange', auRetour)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener('visibilitychange', auRetour)
+    }
   }, [recharger])
 
   const sos = modifies ?? initiaux
