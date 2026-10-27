@@ -44,6 +44,37 @@ export const fr = {
   tempsReel: 'temps réel',
   colonnesSos: ['Heure', 'Lieu', 'Pers.', 'Détails', 'Statut'],
 
+  // Mode réel (API)
+  vueEnsemble: "Vue d'ensemble",
+  misAJourA: (h: string) => `mise à jour à ${h}`,
+  agent: (qui: string) => `Agent${NBSP}: ${qui}`,
+  kpiZones: 'Zones en alerte',
+  parNiveau: (rouge: number, orange: number) => `${rouge} rouge · ${orange} orange`,
+  nonPrisEnCharge: (n: number) => `${n} non pris en charge`,
+  kpiSignalements: 'Signalements confirmés',
+  surRecus: (n: number, h: number) => `sur ${n} reçus (${h}${NBSP}h)`,
+  kpiAlertesDelivrees: 'Alertes délivrées',
+  envoiPhase3: 'envoi réel en phase 3',
+  positionSignalee: 'Position signalée',
+  erreurChargement: 'Impossible de joindre le serveur. Nouvel essai dans quelques secondes.',
+  carteReelleTitre: 'Carte des risques, signalements et victimes',
+  attributionOsm: '© contributeurs OpenStreetMap',
+
+  // Connexion et comptes
+  connexionSousTitre: 'Connectez-vous avec votre compte agent.',
+  accesReserve: 'Accès réservé aux agents',
+  accesReserveDetail: (email: string) =>
+    `Votre compte (${email}) est un compte citoyen. Demandez à un administrateur de vous nommer agent.`,
+  seDeconnecter: 'Se déconnecter',
+  comptes: 'Comptes',
+  colonnesComptes: ['Nom', 'E-mail', 'Rôle', 'Service', ''],
+  roles: { CITOYEN: 'Citoyen', AGENT: 'Agent', ADMIN: 'Administrateur' } as const,
+  enregistrer: 'Enregistrer',
+  enregistre: 'Enregistré',
+  modeDonneesReelles: 'Données réelles',
+  passerDemo: 'Passer en mode démonstration (données fictives)',
+  passerReel: 'Revenir aux données réelles',
+
   // D2 à D8
   colonnesAlertes: ['Niveau', 'Zone', 'Titre', 'Date', 'Statut', 'Source'],
   toutesZones: 'Toutes les zones',
@@ -68,7 +99,7 @@ export const fr = {
   supervision: ['Collecte des données', 'Modèle de prévision', 'Envoi des alertes'],
   nonConnecte: 'Non connecté (phase 1)',
 
-  statutAlerte: { ENVOYEE: 'Envoyée', EN_ATTENTE: 'En attente' } satisfies Record<StatutAlerte, string>,
+  statutAlerte: { ENVOYEE: 'Envoyée', EN_ATTENTE: 'En attente', ANNULEE: 'Annulée' } satisfies Record<StatutAlerte, string>,
   statutSignalement: { A_CONFIRMER: 'À confirmer', CONFIRME: 'Confirmé' } satisfies Record<StatutSignalement, string>,
   statutSos: { RECU: 'Reçu', EN_ROUTE: 'En route', SECOURU: 'Secouru' } satisfies Record<StatutSos, string>,
 }

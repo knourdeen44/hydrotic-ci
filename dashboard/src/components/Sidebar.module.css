@@ -76,3 +76,28 @@
   font-size: var(--text-dash-small-size);
   color: color-mix(in srgb, var(--color-white) 55%, var(--color-gray));
 }
+
+.compte {
+  margin-top: auto;
+  display: grid;
+  gap: 4px;
+  font-size: var(--text-dash-small-size);
+  color: var(--color-white);
+}
+
+.deconnexion {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: color-mix(in srgb, var(--color-white) 70%, var(--color-gray));
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.reel {
+  margin-top: 8px;
+  font-size: var(--text-dash-small-size);
+  color: color-mix(in srgb, var(--color-white) 55%, var(--color-gray));
+}

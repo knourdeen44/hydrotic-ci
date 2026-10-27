@@ -3,9 +3,11 @@ import KpiCard from '../components/KpiCard'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
 import PendingAlertCard from '../components/PendingAlertCard'
+import CarteReelle from '../components/CarteReelle'
 import RiskMap from '../components/RiskMap'
 import SosTable from '../components/SosTable'
 import { repositories } from '../data'
+import { MODE } from '../data/mode'
 import { useDonnees } from '../data/useDonnees'
 import { fr } from '../i18n/fr'
 import { cleSos, useEtat } from '../state/etat'
@@ -14,13 +16,14 @@ import styles from './Overview.module.css'
 /** Données de la vue d'ensemble : en-tête, KPI, carte (niveaux de demain), alerte en attente. */
 async function charger() {
   const r = repositories
-  const [entete, kpis, zones, signalementsCarte, alertes, modeles] = await Promise.all([
+  const [entete, kpis, zones, signalementsCarte, alertes, modeles, signalements] = await Promise.all([
     r.dashboard.entete(),
     r.dashboard.kpis(),
     r.zones.zones(),
     r.dashboard.signalementsCarte(),
     r.alerts.alertes(),
     r.alerts.modeles(),
+    MODE === 'api' ? r.reports.signalements() : Promise.resolve([]),
   ])
   const risques = await Promise.all(zones.map((z) => r.risk.risqueZone(z.id)))
   const enAttente = alertes.find((a) => a.statut === 'EN_ATTENTE')
@@ -29,6 +32,7 @@ async function charger() {
     entete,
     kpis,
     signalementsCarte,
+    signalements,
     zones: zones.map((zone, i) => ({ zone, niveau: risques[i].demain })),
     attente: enAttente &&
       zoneAttente && {
@@ -46,9 +50,9 @@ export default function Overview() {
   const d = useDonnees(charger)
   const { sos, avancerSos, nouveauSos, alerteValidee, validerAlerte, toast } = useEtat()
   if (!d) return null
-  // Indicateur « SOS actifs » recalculé depuis la liste (suit les clics et le mode démo).
+  // Indicateur « SOS actifs » recalculé depuis la liste (mode démo : suit les clics et le scénario 4).
   const kpis = d.kpis.map((kpi) =>
-    kpi.libelle === fr.kpiSosActifs && sos
+    MODE === 'demo' && kpi.libelle === fr.kpiSosActifs && sos
       ? {
           ...kpi,
           valeur: String(sos.length),
@@ -72,12 +76,16 @@ export default function Overview() {
       </div>
       <div className={styles.grid}>
         <Panel titre={fr.carteTitre} aside={fr.schemaIllustratif}>
-          <RiskMap
-            zones={d.zones}
-            sos={(sos ?? []).map((s) => s.positionDashboard)}
-            nouveau={arrivant?.positionDashboard}
-            signalements={d.signalementsCarte}
-          />
+          {MODE === 'api' ? (
+            <CarteReelle zones={d.zones} sos={sos ?? []} signalements={d.signalements} />
+          ) : (
+            <RiskMap
+              zones={d.zones}
+              sos={(sos ?? []).map((s) => s.positionDashboard)}
+              nouveau={arrivant?.positionDashboard}
+              signalements={d.signalementsCarte}
+            />
+          )}
         </Panel>
         <div className={styles.right}>
           {d.attente && (
@@ -85,7 +93,7 @@ export default function Overview() {
               <PendingAlertCard
                 {...d.attente}
                 validee={alerteValidee}
-                onValider={validerAlerte}
+                onValider={() => validerAlerte(d.attente?.alerte.id)}
                 onModifier={bientot}
                 onAnnuler={bientot}
               />

@@ -46,16 +46,32 @@ const verifier = (critere, problemes, detailOk) =>
   verifier('Aucune couleur en dur (hors fichiers générés)', problemes, `${code.length} fichiers, 0 occurrence`)
 }
 
-// 2. Réseau : aucun appel (API, HTTP, WebSocket) dans le code.
+// 2. Réseau (phase 2) : appels seulement depuis les clients d'API, et vers des hôtes autorisés.
 {
-  const motif = /package:http\b|package:dio\b|\bHttpClient\b|\bfetch\(|XMLHttpRequest|\baxios\b|WebSocket|https?:\/\//g
+  const HOTES = [
+    'hydrotic-ci-api.vercel.app', // API Hydrotic
+    'tile.openstreetmap.org', // fond de carte OpenStreetMap
+    'www.openstreetmap.org', // lien d'attribution OpenStreetMap
+    'clerk.accounts.dev', // connexion Clerk (sous-domaines)
+  ]
+  const CLIENTS = [/^dashboard\/src\/data\/api\//, /^mobile\/lib\/data\/api\//]
+  const appel = /package:http\b|package:dio\b|\bHttpClient\b|\bfetch\(|XMLHttpRequest|\baxios\b|WebSocket/g
+  const adresse = /https?:\/\/([^/'"`\s{}$]+)/g
+  const autorise = (hote) => HOTES.some((h) => hote === h || hote.endsWith(`.${h}`))
   const problemes = []
   for (const f of code) {
+    const client = CLIENTS.some((c) => c.test(rel(f)))
     sansCommentaires(lire(f)).split('\n').forEach((ligne, i) => {
-      for (const m of ligne.matchAll(motif)) problemes.push(`${rel(f)}:${i + 1} « ${m[0]} »`)
+      if (!client) for (const m of ligne.matchAll(appel)) problemes.push(`${rel(f)}:${i + 1} « ${m[0]} » hors client d'API`)
+      for (const m of ligne.matchAll(adresse))
+        if (!autorise(m[1])) problemes.push(`${rel(f)}:${i + 1} hôte non autorisé « ${m[1]} »`)
     })
   }
-  verifier('Aucun appel réseau dans le code', problemes, '0 occurrence (http, dio, fetch, XMLHttpRequest, WebSocket, URL)')
+  verifier(
+    'Réseau : clients d\'API seulement, hôtes autorisés',
+    problemes,
+    `appels limités à ${CLIENTS.length} dossiers, hôtes : ${HOTES.join(', ')}`,
+  )
 }
 
 // 3. Taille des fichiers : 300 lignes au plus (CLAUDE.md §10).

@@ -1,8 +1,10 @@
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
+import CarteReelle from '../components/CarteReelle'
 import RiskMap from '../components/RiskMap'
 import SosTable from '../components/SosTable'
 import { repositories } from '../data'
+import { MODE } from '../data/mode'
 import { useDonnees } from '../data/useDonnees'
 import { useLibelleMenu } from '../data/useLibelleMenu'
 import { fr } from '../i18n/fr'
@@ -29,7 +31,11 @@ export default function SosVictimes() {
           <SosTable sos={sos} onAvancer={avancerSos} />
         </Panel>
         <Panel titre={fr.carteSos} aside={fr.schemaIllustratif}>
-          <RiskMap zones={zones} sos={sos.map((s) => s.positionDashboard)} legende={false} />
+          {MODE === 'api' ? (
+            <CarteReelle zones={zones} sos={sos} legende={false} />
+          ) : (
+            <RiskMap zones={zones} sos={sos.map((s) => s.positionDashboard)} legende={false} />
+          )}
         </Panel>
       </div>
     </>

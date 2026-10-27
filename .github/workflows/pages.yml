@@ -43,6 +43,7 @@ jobs:
         run: |
           npm ci
           npm run lint
+          npm test
           npm run build -- --base=$BASE/dashboard/
       - name: Tableau de bord — navigateur de test
         working-directory: dashboard

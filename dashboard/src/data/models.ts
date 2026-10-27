@@ -1,4 +1,5 @@
 // Modèles de données (noms repris du diagramme docs/uml_classes.png).
+import type { LineString, MultiPolygon } from 'geojson'
 
 export const NIVEAUX = ['vert', 'jaune', 'orange', 'rouge'] as const
 export type NiveauRisque = (typeof NIVEAUX)[number]
@@ -7,6 +8,12 @@ export type NiveauRisque = (typeof NIVEAUX)[number]
 export interface PointSvg {
   x: number
   y: number
+}
+
+/** Position géographique réelle (phase 2). */
+export interface Position {
+  lon: number
+  lat: number
 }
 
 /** Textes associés à un niveau (risk.json > niveaux). */
@@ -28,6 +35,10 @@ export interface Zone {
   svgDashboard: string
   /** Position du nom de la zone sur la carte du tableau de bord. */
   etiquetteDashboard?: PointSvg
+  /** Contour réel (OpenStreetMap), en mode API. */
+  contour?: MultiPolygon | null
+  /** Centre [longitude, latitude], en mode API. */
+  centre?: [number, number] | null
 }
 
 /** Prévision de risque d'une zone (UML : Prediction). */
@@ -48,7 +59,7 @@ export interface PluieJour {
   prevision: boolean
 }
 
-export const STATUTS_ALERTE = ['ENVOYEE', 'EN_ATTENTE'] as const
+export const STATUTS_ALERTE = ['ENVOYEE', 'EN_ATTENTE', 'ANNULEE'] as const
 export type StatutAlerte = (typeof STATUTS_ALERTE)[number]
 
 export interface Alerte {
@@ -77,8 +88,11 @@ export interface Signalement {
   non: number
   /** Ancienneté déjà formatée (« 38 min »). */
   il: string
-  /** Position sur la carte schématique mobile. */
-  position: PointSvg
+  /** Position sur la carte schématique mobile (données de départ). */
+  position?: PointSvg
+  /** Position réelle et tronçon (mode API). */
+  geo?: Position | null
+  troncon?: LineString | null
   distanceUtilisateur?: string
   hauteurEau?: string
   /** Tronçon de rue concerné (chemin SVG), surligné quand l'inondation est confirmée. */
@@ -99,6 +113,10 @@ export function statutSosSuivant(statut: StatutSos): StatutSos {
 
 /** SOS reçu par les autorités (UML : SOS). */
 export interface Sos {
+  /** Identifiant (mode API). */
+  id?: string
+  /** Position réelle (mode API). */
+  geo?: Position | null
   heure: string
   lieu: string
   nbPersonnes: number
@@ -141,6 +159,17 @@ export interface Utilisateur {
   canauxPreferes: Canal[]
   scoreFiabilite?: number
   service?: string
+  email?: string | null
+}
+
+/** Compte vu par un administrateur (écran « Comptes »). */
+export interface Compte {
+  id: string
+  prenom: string | null
+  nom: string | null
+  email: string | null
+  role: Role
+  service: string | null
 }
 
 // Données propres au tableau de bord (dashboard.json).

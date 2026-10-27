@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Alertes from './pages/Alertes'
+import Comptes from './pages/Comptes'
 import Historique from './pages/Historique'
 import Overview from './pages/Overview'
 import Previsions from './pages/Previsions'
@@ -27,6 +28,7 @@ function App() {
             <Route path="historique" element={<Historique />} />
             <Route path="zones" element={<ZonesSeuils />} />
             <Route path="supervision" element={<Supervision />} />
+            <Route path="comptes" element={<Comptes />} />
           </Route>
           <Route path="dev/theme" element={<ThemePreview />} />
         </Routes>

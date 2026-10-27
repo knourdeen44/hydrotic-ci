@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { changerMode, MODE, peutBasculer } from '../data/mode'
 import { fr } from '../i18n/fr'
 import { useEtat } from '../state/etat'
 import styles from './DemoMenu.module.css'
@@ -66,26 +67,39 @@ export default function DemoMenu() {
             <span className={styles.note}>{fr.applicationMobile}</span>
           </a>
         ))}
-        <button
-          type="button"
-          className={styles.entree}
-          onClick={fermerPuis(() => {
-            navigate('/')
-            lancerScenario4()
-          })}
-        >
-          {fr.scenario4}
-        </button>
-        <button
-          type="button"
-          className={styles.entree}
-          onClick={fermerPuis(() => {
-            reinitialiser()
-            navigate('/')
-          })}
-        >
-          {fr.reinitialiser}
-        </button>
+        {MODE === 'demo' && (
+          <>
+            <button
+              type="button"
+              className={styles.entree}
+              onClick={fermerPuis(() => {
+                navigate('/')
+                lancerScenario4()
+              })}
+            >
+              {fr.scenario4}
+            </button>
+            <button
+              type="button"
+              className={styles.entree}
+              onClick={fermerPuis(() => {
+                reinitialiser()
+                navigate('/')
+              })}
+            >
+              {fr.reinitialiser}
+            </button>
+          </>
+        )}
+        {peutBasculer && (
+          <button
+            type="button"
+            className={styles.entree}
+            onClick={() => changerMode(MODE === 'api' ? 'demo' : 'api')}
+          >
+            {MODE === 'api' ? fr.passerDemo : fr.passerReel}
+          </button>
+        )}
       </div>
     </div>
   )

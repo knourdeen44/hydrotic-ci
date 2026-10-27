@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import type { Sos } from '../data/models'
 
 /** Identifiant d'un SOS (les fixtures n'en ont pas) : heure + lieu. */
-export const cleSos = (s: Sos) => `${s.heure}-${s.lieu}`
+export const cleSos = (s: Sos) => s.id ?? `${s.heure}-${s.lieu}`
 
 /** État local de la démonstration, partagé entre les pages (aucun envoi réel). */
 export interface Etat {
@@ -13,7 +13,8 @@ export interface Etat {
   nouveauSos: string | undefined
   /** Alerte en attente validée (« ✓ Envoyée »). */
   alerteValidee: boolean
-  validerAlerte: () => void
+  /** Valide l'alerte en attente (identifiant requis en mode réel). */
+  validerAlerte: (id?: string) => void
   /** Scénario 4 du mode démo (vidéo v4_dashboard). */
   lancerScenario4: () => void
   /** Remet les données de démonstration dans leur état de départ. */

@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { repositories } from '../data'
 import { statutSosSuivant, type Sos } from '../data/models'
-import { useDonnees } from '../data/useDonnees'
+import { MODE } from '../data/mode'
 import Toast from '../components/Toast'
+import { fr } from '../i18n/fr'
 import { cleSos, EtatContext, type Etat } from './etat'
 
 // Scénario 4 : délais du prototype s4_dashboard.html.
 const ARRIVEE_SOS = 1500
 const VALIDATION_ALERTE = 4850
 const PRISE_EN_CHARGE = 7200
+// Mode réel : rafraîchissement des SOS (« temps réel »).
+const RAFRAICHISSEMENT_MS = 15000
 
 export default function EtatProvider({ children }: { children: ReactNode }) {
-  const initiaux = useDonnees(() => repositories.sos.liste())
+  const [initiaux, setInitiaux] = useState<Sos[]>()
   const [modifies, setModifies] = useState<Sos[]>()
   const [nouveauSos, setNouveauSos] = useState<string>()
   const [alerteValidee, setAlerteValidee] = useState(false)
@@ -19,21 +22,58 @@ export default function EtatProvider({ children }: { children: ReactNode }) {
   const minuterie = useRef<number | undefined>(undefined)
   const scenario = useRef<number[]>([])
 
-  const sos = modifies ?? initiaux
-
-  const avancerSos = useCallback(
-    (index: number) =>
-      setModifies((courant) =>
-        (courant ?? initiaux ?? []).map((s, i) => (i === index ? { ...s, statut: statutSosSuivant(s.statut) } : s)),
-      ),
-    [initiaux],
-  )
-
   const toast = useCallback((texte: string) => {
     setMessage(texte)
     window.clearTimeout(minuterie.current)
     minuterie.current = window.setTimeout(() => setMessage(undefined), 3000)
   }, [])
+
+  const recharger = useCallback(async () => {
+    try {
+      setInitiaux(await repositories.sos.liste())
+      if (MODE === 'api') setModifies(undefined)
+    } catch {
+      if (MODE === 'api') toast(fr.erreurChargement)
+    }
+  }, [toast])
+
+  useEffect(() => {
+    void recharger()
+    if (MODE !== 'api') return
+    const id = window.setInterval(() => void recharger(), RAFRAICHISSEMENT_MS)
+    return () => window.clearInterval(id)
+  }, [recharger])
+
+  const sos = modifies ?? initiaux
+
+  const avancerSos = useCallback(
+    (index: number) => {
+      const cible = (modifies ?? initiaux ?? [])[index]
+      if (!cible) return
+      // Affichage immédiat, puis enregistrement (mode réel).
+      setModifies((courant) =>
+        (courant ?? initiaux ?? []).map((s, i) => (i === index ? { ...s, statut: statutSosSuivant(s.statut) } : s)),
+      )
+      if (MODE === 'api')
+        repositories.sos.avancer(cible).then(recharger, (e: Error) => {
+          toast(e.message)
+          void recharger()
+        })
+    },
+    [initiaux, modifies, recharger, toast],
+  )
+
+  const validerAlerte = useCallback(
+    (id?: string) => {
+      setAlerteValidee(true)
+      if (MODE === 'api' && id)
+        repositories.alerts.valider(id).catch((e: Error) => {
+          setAlerteValidee(false)
+          toast(e.message)
+        })
+    },
+    [toast],
+  )
 
   const arreterScenario = useCallback(() => {
     scenario.current.forEach((t) => window.clearTimeout(t))
@@ -68,17 +108,8 @@ export default function EtatProvider({ children }: { children: ReactNode }) {
   }, [initiaux, reinitialiser])
 
   const etat = useMemo<Etat>(
-    () => ({
-      sos,
-      avancerSos,
-      nouveauSos,
-      alerteValidee,
-      validerAlerte: () => setAlerteValidee(true),
-      lancerScenario4,
-      reinitialiser,
-      toast,
-    }),
-    [sos, avancerSos, nouveauSos, alerteValidee, lancerScenario4, reinitialiser, toast],
+    () => ({ sos, avancerSos, nouveauSos, alerteValidee, validerAlerte, lancerScenario4, reinitialiser, toast }),
+    [sos, avancerSos, nouveauSos, alerteValidee, validerAlerte, lancerScenario4, reinitialiser, toast],
   )
 
   return (

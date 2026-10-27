@@ -68,6 +68,9 @@ export function createMockRepositories(): Repositories {
       alertes,
       alerte: async (id) => find(await alertes(), (a) => a.id === id, `alerte ${id}`),
       modeles: async () => alertsJson.modeles,
+      // Mode démonstration : l'état « validée » est tenu localement (state/EtatProvider).
+      valider: async () => {},
+      annuler: async () => {},
     },
 
     reports: {
@@ -81,11 +84,14 @@ export function createMockRepositories(): Repositories {
     sos: {
       sosCourant: async () => parse.sosCourant(sosJson.sosCourant),
       liste: async () => sosJson.liste.map(parse.sos),
+      avancer: async () => {},
     },
 
     users: {
       citoyen: async () => parse.utilisateur(userJson.citoyen),
       agent: async () => parse.utilisateur(userJson.agent),
+      comptes: async () => [],
+      changerRole: async () => {},
     },
 
     dashboard: {

@@ -96,3 +96,20 @@
     opacity: 0;
   }
 }
+
+/* Carte réelle (Leaflet). */
+.leaflet {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.legendeLeaflet {
+  z-index: 500;
+}
+
+.carre {
+  background: var(--color-slate);
+  border: 2px solid var(--color-white);
+  border-radius: 3px;
+}
