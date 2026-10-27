@@ -157,6 +157,8 @@ abstract final class Fr {
   static const connexionRequise = 'Connectez-vous pour envoyer un SOS.';
   static const attributionOsm = '© contributeurs OpenStreetMap';
 
+  static const erreurChargement = 'Impossible de charger les données. Vérifiez la connexion et réessayez.';
+
   // Actions non branchées
   static const bientot = 'Disponible dans une prochaine version';
 

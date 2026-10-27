@@ -11,6 +11,7 @@ import '../../data/providers.dart';
 import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
 import '../../theme/hydrotic_colors.dart';
+import '../../theme/hydrotic_text.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/carte_osm.dart';
 import '../../widgets/confirm_question_sheet.dart';
@@ -104,7 +105,8 @@ class _CarteScreenState extends ConsumerState<CarteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final d = ref.watch(carteProvider).valueOrNull;
+    final etat = ref.watch(carteProvider);
+    final d = etat.valueOrNull;
     final confirmations = ref.watch(confirmationsProvider);
     final actif = _actif(d?.signalements);
     final ouverte = _feuilleOuverte ?? (actif != null && confirmations[actif.id] == null);
@@ -112,7 +114,14 @@ class _CarteScreenState extends ConsumerState<CarteScreen> {
       tab: HydroticTab.carte,
       showSosFab: !ouverte,
       body: d == null
-          ? const SizedBox.shrink()
+          ? (etat.hasError
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Text(Fr.erreurChargement, textAlign: TextAlign.center, style: HydroticText.body),
+                  ),
+                )
+              : const SizedBox.shrink())
           : Stack(
               fit: StackFit.expand,
               children: [

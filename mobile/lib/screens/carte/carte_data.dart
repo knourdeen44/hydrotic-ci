@@ -30,7 +30,8 @@ final carteProvider = FutureProvider<CarteDonnees>((ref) async {
     citoyen: await citoyenF,
     zones: zones,
     niveauxAujourdhui: {for (final z in zones) z.id: (await risk.risqueZone(z.id)).aujourdhui},
-    signalements: await signalementsF,
+    // Signalements indisponibles (réseau, connexion) : la carte s'affiche quand même.
+    signalements: await signalementsF.catchError((Object _) => <Signalement>[]),
     positionVous: await positionF,
   );
 });

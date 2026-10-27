@@ -124,7 +124,8 @@ class ApiReportRepository implements ReportRepository {
 
   @override
   Future<List<Signalement>> signalements() async {
-    final gps = await _position();
+    // Sans attendre le GPS plus de 3 s : la distance n'est qu'un plus.
+    final gps = await _position().timeout(const Duration(seconds: 3), onTimeout: () => null);
     final requete = gps == null ? '' : '?lat=${gps.geo.lat}&lon=${gps.geo.lon}';
     return [for (final s in await _api.get('/api/signalements$requete') as List) _signalement(s as _Json)];
   }
