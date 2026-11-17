@@ -2,8 +2,17 @@ import type { PluieJour } from '../data/models'
 import styles from './RainBars.module.css'
 
 /** Barres de pluie (prototype mobile `.bars`), en grand : prévisions hachurées. */
-export default function RainBars({ jours, hauteur = 220 }: { jours: PluieJour[]; hauteur?: number }) {
-  const max = Math.max(...jours.map((j) => j.mm), 0)
+export default function RainBars({
+  jours,
+  hauteur = 220,
+  echelleMinMm = 0,
+}: {
+  jours: PluieJour[]
+  hauteur?: number
+  /** Hauteur pleine au moins à cette valeur : quelques millimètres ne remplissent pas le graphique. */
+  echelleMinMm?: number
+}) {
+  const max = Math.max(...jours.map((j) => j.mm), echelleMinMm)
   return (
     <figure className={styles.figure}>
       <div className={styles.bars} style={{ height: hauteur }}>

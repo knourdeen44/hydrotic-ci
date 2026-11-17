@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/mode.dart';
 import '../../data/models/alerte.dart';
 import '../../data/models/niveau_risque.dart';
 import '../../l10n/fr.dart';
@@ -175,7 +176,13 @@ class _AccueilScreenState extends ConsumerState<AccueilScreen> {
                   ],
                 ),
                 const SectionTitle(Fr.pluieTitre),
-                RainBars(jours: d.pluie),
+                // Mode réel : échelle fixe (50 mm, forte pluie) et valeurs affichées, comme le niveau
+                // de risque calculé à partir des mêmes données Open-Meteo.
+                RainBars(
+                  jours: d.pluie,
+                  echelleMinMm: modeApi ? RainBars.echelleReelleMm : 0,
+                  valeurs: modeApi,
+                ),
                 const SectionTitle(Fr.accesRapide),
                 QuickActions(
                   onCarte: () => context.go('/carte'),

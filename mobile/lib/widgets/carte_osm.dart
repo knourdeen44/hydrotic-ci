@@ -49,9 +49,16 @@ class CarteOsm extends StatelessWidget {
       options: MapOptions(
         initialCenter: centre == null ? _abidjan : _point(centre),
         initialZoom: 15,
-        initialCameraFit: centre == null && contours.length > 2
-            ? CameraFit.bounds(bounds: LatLngBounds.fromPoints(contours), padding: const EdgeInsets.all(24))
-            : null,
+        initialCameraFit: centre != null
+            // Point centré au-dessus de la mention OpenStreetMap (bas de la carte).
+            ? CameraFit.coordinates(
+                coordinates: [_point(centre)],
+                padding: const EdgeInsets.only(bottom: 40),
+                maxZoom: 15,
+              )
+            : contours.length > 2
+                ? CameraFit.bounds(bounds: LatLngBounds.fromPoints(contours), padding: const EdgeInsets.all(24))
+                : null,
         interactionOptions: InteractionOptions(
           flags: interactive ? InteractiveFlag.all & ~InteractiveFlag.rotate : InteractiveFlag.none,
         ),

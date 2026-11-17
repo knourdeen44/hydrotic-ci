@@ -9,17 +9,35 @@ import '../theme/hydrotic_text.dart';
 
 /// Barres de pluie sur 7 jours (prototype : `.bars` + `.lbl`). Prévisions hachurées.
 class RainBars extends StatelessWidget {
-  const RainBars({super.key, required this.jours, this.height = HydroticSizes.rainBars});
+  const RainBars({
+    super.key,
+    required this.jours,
+    this.height = HydroticSizes.rainBars,
+    this.echelleMinMm = 0,
+    this.valeurs = false,
+  });
 
   final List<PluieJour> jours;
   final double height;
+
+  /// Hauteur pleine au moins à cette valeur : quelques millimètres ne remplissent pas le graphique.
+  final double echelleMinMm;
+
+  /// Affiche les millimètres sous chaque jour.
+  final bool valeurs;
+
+  static String _mm(double mm) =>
+      (mm < 10 ? mm.toStringAsFixed(1) : mm.round().toString()).replaceAll('.', ',');
+
+  /// Échelle du mode réel : une journée à 50 mm remplit le graphique.
+  static const double echelleReelleMm = 50;
 
   /// La barre la plus haute occupe 92 % de la hauteur (valeurs du prototype).
   static const double _remplissageMax = .92;
 
   @override
   Widget build(BuildContext context) {
-    final max = jours.map((j) => j.mm).fold<double>(0, math.max);
+    final max = jours.map((j) => j.mm).fold<double>(echelleMinMm, math.max);
     final resume = jours.map((j) => '${j.label} ${j.mm.round()} mm').join(', ');
     return Semantics(
       label: resume,
@@ -51,7 +69,7 @@ class RainBars extends StatelessWidget {
                 if (i > 0) const SizedBox(width: HydroticSpacing.gapS),
                 Expanded(
                   child: Text(
-                    jour.label,
+                    valeurs ? '${jour.label}\n${_mm(jour.mm)}' : jour.label,
                     textAlign: TextAlign.center,
                     style: HydroticText.navLabel.copyWith(color: HydroticColors.grayLight),
                   ),

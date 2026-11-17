@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import logo from '../assets/logo_hydrotic_icon.png'
 import { repositories } from '../data'
-import { MODE } from '../data/mode'
 import { useDonnees } from '../data/useDonnees'
 import { fr } from '../i18n/fr'
 import { useCompte } from '../state/compte'
@@ -55,7 +54,7 @@ export default function Sidebar() {
           </button>
         </div>
       )}
-      <p className={compte ? styles.reel : styles.demo}>{MODE === 'api' ? fr.modeDonneesReelles : fr.modeDemo}</p>
+      <p className={compte ? styles.reel : styles.demo}>{fr.modeDemo}</p>
     </nav>
   )
 }

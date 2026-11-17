@@ -1,6 +1,7 @@
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
 import RainBars from '../components/RainBars'
+import { MODE } from '../data/mode'
 import { repositories } from '../data'
 import type { NiveauInfo, NiveauRisque } from '../data/models'
 import { useDonnees } from '../data/useDonnees'
@@ -47,7 +48,8 @@ export default function Previsions() {
         ))}
       </div>
       <Panel titre={fr.pluieTitre}>
-        <RainBars jours={d.pluie} />
+        {/* Mode réel : échelle fixe (50 mm), même source Open-Meteo que le niveau calculé. */}
+        <RainBars jours={d.pluie} echelleMinMm={MODE === 'api' ? 50 : 0} />
       </Panel>
     </>
   )
