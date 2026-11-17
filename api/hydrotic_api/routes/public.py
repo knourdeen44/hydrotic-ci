@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from ..db import get_db
 from ..pluie import PluieIndisponible, pluie_zone
+from ..risque import risque_zone
 
 routeur = APIRouter(prefix="/api", tags=["public"])
 NIVEAUX = ("vert", "jaune", "orange", "rouge")
@@ -69,9 +70,10 @@ def niveau_du_jour(db: psycopg.Connection, zone_id: str, jour: date) -> dict | N
 
 @routeur.get("/zones/{zone_id}/risque")
 def risque(zone_id: str, db: psycopg.Connection = Depends(get_db)) -> dict:
-    """Niveau d'aujourd'hui et de demain (fixés par les agents), signalements confirmés sur 24 h."""
+    """Niveau d'aujourd'hui et de demain : le plus élevé entre pluie prévue, saisie des agents et terrain."""
     zone_existe(db, zone_id)
     aujourdhui = datetime.now(timezone.utc).date()
+    calcul = risque_zone(db, zone_id)
     jour, demain = niveau_du_jour(db, zone_id, aujourdhui), niveau_du_jour(db, zone_id, aujourdhui + timedelta(days=1))
     confirmes = db.execute(
         """SELECT count(*) AS n FROM signalement
@@ -81,10 +83,12 @@ def risque(zone_id: str, db: psycopg.Connection = Depends(get_db)) -> dict:
     maj = max((p["maj_le"] for p in (jour, demain) if p), default=None)
     return {
         "zoneId": zone_id,
-        "aujourdhui": jour["niveau"] if jour else "vert",
-        "demain": demain["niveau"] if demain else "vert",
+        "aujourdhui": calcul["aujourdhui"],
+        "demain": calcul["demain"],
         "signalementsConfirmes": confirmes,
         "majLe": maj.isoformat() if maj else None,
+        "rougeAValider": calcul["rougeAValider"],
+        "sources": calcul["sources"],
     }
 
 

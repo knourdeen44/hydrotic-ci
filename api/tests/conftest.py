@@ -2,6 +2,7 @@
 import os
 from datetime import datetime, timedelta, timezone
 
+import httpx
 import jwt
 import psycopg
 import pytest
@@ -16,7 +17,7 @@ os.environ["DATABASE_URL"] = URL
 os.environ.setdefault("CLERK_PUBLISHABLE_KEY", "pk_test_ZXhlbXBsZS5jbGVyay5hY2NvdW50cy5kZXYk")  # exemple.clerk.accounts.dev
 os.environ["ALLOWED_ORIGINS"] = "https://knourdeen44.github.io,http://localhost:5173"
 
-from hydrotic_api import auth  # noqa: E402
+from hydrotic_api import auth, pluie  # noqa: E402
 from hydrotic_api.app import app  # noqa: E402
 from hydrotic_api.migrate import migrer  # noqa: E402
 from hydrotic_api.seed import peupler  # noqa: E402
@@ -48,6 +49,14 @@ def jeton(sub: str = "user_test", azp: str = "https://knourdeen44.github.io", ex
         CLE_PRIVEE,
         algorithm="RS256",
     )
+
+
+@pytest.fixture(autouse=True)
+def sans_open_meteo(monkeypatch):
+    """Aucun appel réseau en test : Open-Meteo est « en panne » sauf si un test le remplace."""
+    def en_panne(_lat, _lon):
+        raise httpx.ConnectError("pas de réseau en test")
+    monkeypatch.setattr(pluie, "_interroger", en_panne)
 
 
 @pytest.fixture
