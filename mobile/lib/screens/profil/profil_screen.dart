@@ -13,7 +13,9 @@ import '../../state/session.dart';
 import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../theme/hydrotic_text.dart';
+import '../../widgets/sos_fab.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/chargement.dart';
 import '../../widgets/hydrotic_button.dart';
 import '../../widgets/screen_header.dart';
 import '../../widgets/section_title.dart';
@@ -42,7 +44,11 @@ class ProfilScreen extends ConsumerWidget {
       body: Column(
         children: [
           const ScreenHeader(titre: Fr.navProfil),
-          Expanded(child: d == null ? const SizedBox.shrink() : _contenu(context, ref, d)),
+          Expanded(
+            child: d == null
+                ? (modeApi ? const Chargement() : const SizedBox.shrink())
+                : _contenu(context, ref, d),
+          ),
         ],
       ),
     );
@@ -67,7 +73,8 @@ class ProfilScreen extends ConsumerWidget {
         HydroticSpacing.screenPadding,
         0,
         HydroticSpacing.screenPadding,
-        HydroticSpacing.screenPadding + HydroticSizes.sosFab,
+        // Fin de liste au-dessus du bouton SOS flottant (« Se déconnecter » jamais masqué).
+        SosFab.gapAboveNav + HydroticSizes.sosFab + HydroticSpacing.gapL * 2,
       ),
       children: [
         _Identite(prenom: d.citoyen.nom, ligne: Fr.identite(nom(principale))),

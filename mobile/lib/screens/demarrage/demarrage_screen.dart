@@ -85,12 +85,13 @@ class _DemarrageScreenState extends ConsumerState<DemarrageScreen> {
         child: Stack(
           children: [
             Positioned.fill(child: _contenu()),
-            // Bouton SOS présent sur tous les écrans de l'application citoyenne.
-            Positioned(
-              right: SosFab.right,
-              bottom: SosFab.gapAboveNav,
-              child: SosFab(onPressed: () => context.push('/sos')),
-            ),
+            // Bouton SOS sur tous les écrans ; en mode réel, seulement une fois connecté.
+            if (!modeApi || session.value)
+              Positioned(
+                right: SosFab.right,
+                bottom: SosFab.gapAboveNav,
+                child: SosFab(onPressed: () => context.push('/sos')),
+              ),
           ],
         ),
       ),

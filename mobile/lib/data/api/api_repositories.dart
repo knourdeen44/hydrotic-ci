@@ -183,23 +183,22 @@ class ApiReportRepository implements ReportRepository {
 }
 
 class ApiSosRepository implements SosRepository {
-  ApiSosRepository(this._api, this._position, this._fixtures);
+  ApiSosRepository(this._api, this._fixtures);
 
   final ApiClient _api;
-  final LirePosition _position;
 
   /// Libellés des étapes du suivi (« Reçu par les secours »…).
   final SosRepository _fixtures;
 
   Future<List<String>> _libelles() async => [for (final e in (await _fixtures.sosCourant()).timeline) e.etape];
 
-  /// SOS prêt à partir : position GPS réelle, options par défaut.
+  /// SOS prêt à partir, sans attendre le GPS : l'écran suit la localisation à part
+  /// (positionGpsProvider) et la position est lue au moment de l'envoi.
   @override
   Future<SosCourant> sosCourant() async {
-    final gps = await _position();
     return SosCourant(
-      lieu: gps == null ? Fr.positionInconnue : Fr.positionGps,
-      precisionM: (gps?.precisionM ?? 0).roundToDouble(),
+      lieu: Fr.positionGps,
+      precisionM: 0,
       nbPersonnes: 1,
       blesses: false,
       hauteurEau: Fr.hauteurs.first,

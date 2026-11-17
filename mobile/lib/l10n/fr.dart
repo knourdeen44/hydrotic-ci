@@ -1,3 +1,5 @@
+import '../data/models/niveau_risque.dart';
+
 // Textes affichés (français). Centralisés ici pour préparer les langues locales (version 3).
 // Les textes des fixtures sont affichés tels quels (voir FixtureLoader pour la typographie).
 
@@ -64,6 +66,12 @@ abstract final class Fr {
   static const legendeInonde = 'Inondé (confirmé)';
   static const legendeSignalement = 'Signalement';
   static const legendeVous = 'Vous';
+  static const legendeZone = {
+    NiveauRisque.rouge: 'Zone : danger',
+    NiveauRisque.orange: 'Zone : risque élevé',
+    NiveauRisque.jaune: 'Zone : vigilance',
+    NiveauRisque.vert: 'Zone : normal',
+  };
 
   // Écran SOS (M4)
   static const besoinAide = "Besoin d'aide$nbsp?";
@@ -71,6 +79,9 @@ abstract final class Fr {
   static const positionTrouvee = 'Position GPS trouvée';
   static String precision(double metres, String lieu) =>
       'Précision ±$nbsp${metres.round()}${nbsp}m · $lieu';
+  static const localisationEnCours = 'Localisation en cours…';
+  static const positionNonPartagee = 'Position non partagée — vous pouvez décrire le lieu';
+  static String precisionSeule(double metres) => 'Précision ±$nbsp${metres.round()}${nbsp}m';
   static const personnes = 'Personnes';
   static const blesses = 'Blessés';
   static const hauteurEau = "Hauteur d'eau";

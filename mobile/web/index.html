@@ -20,13 +20,16 @@
       var CLE = 'pk_test_Y2xvc2Utc2VhbC03MzQyLmNsZXJrLmFjY291bnRzLmRldiQ';
       var demo = /[?&]demo=/.test(location.hash);
       try { demo = demo || localStorage.getItem('hydrotic-mode') === 'demo'; } catch (e) {}
+      // Adresse de l'application (/hydrotic-ci/app/) : sans elle, Clerk renvoie à la racine du domaine (404).
+      var ici = document.baseURI;
+      var retour = function () { return { forceRedirectUrl: location.href, signUpForceRedirectUrl: location.href, signInForceRedirectUrl: location.href }; };
       var clerk = demo ? Promise.resolve(null) : new Promise(function (ok) {
         var s = document.createElement('script');
         s.src = 'https://' + atob(CLE.split('_')[2]).replace(/\$$/, '') + '/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
         s.async = true;
         s.crossOrigin = 'anonymous';
         s.setAttribute('data-clerk-publishable-key', CLE);
-        s.onload = function () { window.Clerk.load().then(function () { ok(window.Clerk); }, function () { ok(null); }); };
+        s.onload = function () { window.Clerk.load({ signInFallbackRedirectUrl: ici, signUpFallbackRedirectUrl: ici, afterSignOutUrl: ici }).then(function () { ok(window.Clerk); }, function () { ok(null); }); };
         s.onerror = function () { ok(null); };
         document.head.appendChild(s);
       });
@@ -42,11 +45,11 @@
               var arreter = c.addListener(function (e) {
                 if (e.user) { arreter(); c.closeSignIn(); c.closeSignUp(); ok(true); }
               });
-              if (inscription) c.openSignUp({}); else c.openSignIn({});
+              if (inscription) c.openSignUp(retour()); else c.openSignIn(retour());
             });
           });
         },
-        deconnecter: function () { return clerk.then(function (c) { return c ? c.signOut() : null; }); },
+        deconnecter: function () { return clerk.then(function (c) { return c ? c.signOut({ redirectUrl: ici }) : null; }); },
       };
     })();
   </script>

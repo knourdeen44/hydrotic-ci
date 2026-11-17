@@ -14,6 +14,7 @@ import '../../theme/hydrotic_colors.dart';
 import '../../theme/hydrotic_text.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/carte_osm.dart';
+import '../../widgets/chargement.dart';
 import '../../widgets/confirm_question_sheet.dart';
 import '../../widgets/schematic_map.dart';
 import '../../widgets/toast.dart';
@@ -121,7 +122,7 @@ class _CarteScreenState extends ConsumerState<CarteScreen> {
                     child: Text(Fr.erreurChargement, textAlign: TextAlign.center, style: HydroticText.body),
                   ),
                 )
-              : const SizedBox.shrink())
+              : (modeApi ? const Chargement() : const SizedBox.shrink()))
           : Stack(
               fit: StackFit.expand,
               children: [

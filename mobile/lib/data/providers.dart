@@ -38,7 +38,7 @@ final reportRepositoryProvider = Provider<ReportRepository>((ref) => modeApi
 final sosRepositoryProvider = Provider<SosRepository>((ref) {
   final fixtures = MockSosRepository(ref.watch(fixtureLoaderProvider));
   return modeApi
-      ? ApiSosRepository(ref.watch(apiClientProvider), () => ref.read(positionGpsProvider.future), fixtures)
+      ? ApiSosRepository(ref.watch(apiClientProvider), fixtures)
       : fixtures;
 });
 

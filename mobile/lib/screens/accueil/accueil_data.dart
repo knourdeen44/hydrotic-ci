@@ -39,7 +39,10 @@ final accueilProvider = FutureProvider<AccueilDonnees>((ref) async {
     zone: zone,
     quartier: principale && citoyen.quartierPrincipal != null
         ? citoyen.quartierPrincipal!
-        : '${zone.nom} · ${zone.commune}',
+        // Treichville est à la fois quartier et commune : le nom ne s'affiche qu'une fois.
+        : zone.nom == zone.commune
+            ? zone.nom
+            : '${zone.nom} · ${zone.commune}',
     niveaux: await niveauxF,
     risque: await risk.risqueZone(zoneId),
     pluie: await risk.pluie(zoneId),

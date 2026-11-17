@@ -8,6 +8,7 @@ import '../l10n/fr.dart';
 import '../theme/hydrotic_colors.dart';
 import '../theme/hydrotic_sizes.dart';
 import '../theme/hydrotic_text.dart';
+import '../theme/risk_colors.dart';
 import 'map/schematic_map_decor.dart';
 import 'map/schematic_map_painter.dart';
 
@@ -137,15 +138,18 @@ class _SchematicMapState extends State<SchematicMap> with TickerProviderStateMix
               ),
             ),
           ),
-          if (widget.showLegend) const Positioned(top: 10, left: 10, child: _Legend()),
+          if (widget.showLegend) const Positioned(top: 10, left: 10, child: CarteLegende()),
         ],
       ),
     );
   }
 }
 
-class _Legend extends StatelessWidget {
-  const _Legend();
+/// Légende des cartes ; `niveaux` ajoute la couleur des zones (carte OpenStreetMap).
+class CarteLegende extends StatelessWidget {
+  const CarteLegende({super.key, this.niveaux = false});
+
+  final bool niveaux;
 
   @override
   Widget build(BuildContext context) {
@@ -156,12 +160,15 @@ class _Legend extends StatelessWidget {
         borderRadius: BorderRadius.circular(HydroticRadius.legend),
         boxShadow: HydroticShadows.legend,
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _LegendItem(color: HydroticColors.riskRouge, label: Fr.legendeInonde),
-          _LegendItem(color: HydroticColors.slate, label: Fr.legendeSignalement),
-          _LegendItem(color: HydroticColors.deep, label: Fr.legendeVous),
+          const _LegendItem(color: HydroticColors.riskRouge, label: Fr.legendeInonde),
+          const _LegendItem(color: HydroticColors.slate, label: Fr.legendeSignalement),
+          const _LegendItem(color: HydroticColors.deep, label: Fr.legendeVous),
+          if (niveaux)
+            for (final n in NiveauRisque.values.reversed)
+              _LegendItem(color: n.couleur, label: Fr.legendeZone[n]!, carre: true),
         ],
       ),
     );
@@ -169,10 +176,13 @@ class _Legend extends StatelessWidget {
 }
 
 class _LegendItem extends StatelessWidget {
-  const _LegendItem({required this.color, required this.label});
+  const _LegendItem({required this.color, required this.label, this.carre = false});
 
   final Color color;
   final String label;
+
+  /// Zone (carré translucide bordé) plutôt que point.
+  final bool carre;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +192,13 @@ class _LegendItem extends StatelessWidget {
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          decoration: carre
+              ? BoxDecoration(
+                  color: color.withValues(alpha: .22),
+                  border: Border.all(color: color, width: 2),
+                  borderRadius: BorderRadius.circular(2),
+                )
+              : BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
         Text(label, style: HydroticText.navLabel.copyWith(height: 1.7, color: HydroticColors.gray)),

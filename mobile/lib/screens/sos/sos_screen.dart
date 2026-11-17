@@ -188,7 +188,7 @@ class _SosScreenState extends ConsumerState<SosScreen> {
           const SizedBox(height: 20),
           SosHoldButton(key: _bouton, onComplete: _maintienTermine),
           const SizedBox(height: 14),
-          _Position(lieu: sos.lieu, precisionM: sos.precisionM),
+          if (modeApi) const _PositionReelle() else _Position(titre: Fr.positionTrouvee, detail: Fr.precision(sos.precisionM, sos.lieu)),
           const SizedBox(height: HydroticSpacing.gapM),
           SosOptions(valeurs: options, onChanged: (v) => setState(() => _options = v)),
           const SizedBox(height: HydroticSpacing.gapL),
@@ -199,16 +199,34 @@ class _SosScreenState extends ConsumerState<SosScreen> {
   }
 }
 
-/// Carte de position (prototype : `.pos`). Valeur fictive, pas de géolocalisation en phase 1.
-class _Position extends StatelessWidget {
-  const _Position({required this.lieu, required this.precisionM});
+/// Mode réel : position lue au fil de la géolocalisation (en cours, refusée ou trouvée).
+class _PositionReelle extends ConsumerWidget {
+  const _PositionReelle();
 
-  final String lieu;
-  final double precisionM;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gps = ref.watch(positionGpsProvider);
+    if (gps.isLoading) return const _Position(titre: Fr.localisationEnCours);
+    final position = gps.valueOrNull;
+    if (position == null) return const _Position(titre: Fr.positionNonPartagee);
+    return _Position(
+      titre: Fr.positionTrouvee,
+      detail: position.precisionM > 0 ? Fr.precisionSeule(position.precisionM) : null,
+    );
+  }
+}
+
+/// Carte de position (prototype : `.pos`).
+class _Position extends StatelessWidget {
+  const _Position({required this.titre, this.detail});
+
+  final String titre;
+  final String? detail;
 
   @override
   Widget build(BuildContext context) {
     final style = HydroticText.small.copyWith(color: HydroticColors.gray);
+    final detail = this.detail;
     return Container(
       padding: const EdgeInsets.all(HydroticSpacing.gapM),
       decoration: BoxDecoration(
@@ -227,8 +245,8 @@ class _Position extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(Fr.positionTrouvee, style: style.copyWith(fontWeight: FontWeight.w700)),
-                Text(Fr.precision(precisionM, lieu), style: style),
+                Text(titre, style: style.copyWith(fontWeight: FontWeight.w700)),
+                if (detail != null) Text(detail, style: style),
               ],
             ),
           ),

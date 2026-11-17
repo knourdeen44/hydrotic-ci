@@ -187,3 +187,19 @@ def test_administrateur_et_roles(client, monkeypatch):
                         json={"role": "CITOYEN"}).status_code == 409
     assert client.patch("/api/admin/utilisateurs/personne", headers=auth("user_chef"),
                         json={"role": "AGENT"}).status_code == 404
+
+
+def test_nouvel_inscrit_sans_acces_agent_ni_admin(client):
+    """Un compte créé à la première connexion est citoyen : ni SOS des autres, ni comptes, ni rôles."""
+    nouveau = auth("user_nouvel_inscrit")
+    assert client.get("/api/moi", headers=nouveau).json()["role"] == "CITOYEN"
+    for chemin in ("/api/agent/sos", "/api/agent/tableau", "/api/agent/alertes", "/api/admin/utilisateurs"):
+        assert client.get(chemin, headers=nouveau).status_code == 403, chemin
+    assert client.patch("/api/admin/utilisateurs/user_nouvel_inscrit", headers=nouveau,
+                        json={"role": "ADMIN"}).status_code == 403
+
+    # Un agent ne peut pas non plus changer un rôle : réservé aux administrateurs.
+    role("user_agent_roles", "AGENT")
+    assert client.patch("/api/admin/utilisateurs/user_nouvel_inscrit", headers=auth("user_agent_roles"),
+                        json={"role": "AGENT"}).status_code == 403
+    assert client.get("/api/moi", headers=nouveau).json()["role"] == "CITOYEN"

@@ -9,6 +9,7 @@ import '../data/models/zone.dart';
 import '../l10n/fr.dart';
 import '../theme/hydrotic_colors.dart';
 import '../theme/risk_colors.dart';
+import 'schematic_map.dart';
 
 /// Carte réelle (mode réel) : fond OpenStreetMap, contours OSM des quartiers, signalements, position.
 class CarteOsm extends StatelessWidget {
@@ -19,6 +20,8 @@ class CarteOsm extends StatelessWidget {
     this.vous,
     this.signalementActifId,
     this.interactive = true,
+    this.centre,
+    this.legende = true,
   });
 
   final List<({Zone zone, NiveauRisque niveau})> zones;
@@ -26,6 +29,10 @@ class CarteOsm extends StatelessWidget {
   final Geo? vous;
   final String? signalementActifId;
   final bool interactive;
+
+  /// Centre sans position connue (ex. quartier principal) ; sinon, tous les quartiers sont cadrés.
+  final Geo? centre;
+  final bool legende;
 
   static const _abidjan = LatLng(5.33, -3.98);
 
@@ -35,11 +42,14 @@ class CarteOsm extends StatelessWidget {
   Widget build(BuildContext context) {
     final contours = [for (final z in zones) for (final anneau in z.zone.contour) for (final g in anneau) _point(g)];
     final vous = this.vous;
-    return FlutterMap(
+    final centre = vous ?? this.centre;
+    final carte = FlutterMap(
+      // Recentrée quand la position arrive (le centre initial n'est lu qu'à la création).
+      key: ValueKey(centre),
       options: MapOptions(
-        initialCenter: vous == null ? _abidjan : _point(vous),
+        initialCenter: centre == null ? _abidjan : _point(centre),
         initialZoom: 15,
-        initialCameraFit: vous == null && contours.length > 2
+        initialCameraFit: centre == null && contours.length > 2
             ? CameraFit.bounds(bounds: LatLngBounds.fromPoints(contours), padding: const EdgeInsets.all(24))
             : null,
         interactionOptions: InteractionOptions(
@@ -76,6 +86,11 @@ class CarteOsm extends StatelessWidget {
         ]),
         const SimpleAttributionWidget(source: Text(Fr.attributionOsm)),
       ],
+    );
+    if (!legende) return carte;
+    return Stack(
+      fit: StackFit.expand,
+      children: [carte, const Positioned(top: 10, left: 10, child: CarteLegende(niveaux: true))],
     );
   }
 }

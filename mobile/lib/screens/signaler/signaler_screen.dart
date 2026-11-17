@@ -12,6 +12,7 @@ import '../../l10n/fr.dart';
 import '../../state/app_state.dart';
 import '../../theme/hydrotic_sizes.dart';
 import '../../widgets/carte_osm.dart';
+import '../../widgets/chargement.dart';
 import '../../widgets/choice_chips.dart';
 import '../../widgets/dashed_button.dart';
 import '../../widgets/hydrotic_button.dart';
@@ -110,10 +111,15 @@ class _SignalerScreenState extends ConsumerState<SignalerScreen> {
                   child: SizedBox(
                     height: _hauteurCarte,
                     child: d == null
-                        ? const SizedBox.shrink()
+                        ? (modeApi ? const Chargement() : const SizedBox.shrink())
                         : modeApi
                             ? CarteOsm(
                                 interactive: false,
+                                legende: false,
+                                centre: d.zones
+                                    .where((z) => z.id == d.citoyen.zonesSuivies.firstOrNull)
+                                    .firstOrNull
+                                    ?.centre,
                                 zones: [
                                   for (final z in d.zones) (zone: z, niveau: d.niveauxAujourdhui[z.id]!),
                                 ],
