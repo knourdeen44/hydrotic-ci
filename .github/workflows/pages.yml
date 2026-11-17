@@ -71,6 +71,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          # Version figée : les goldens et « flutter analyze » (infos bloquantes) changent avec Flutter.
+          flutter-version: 3.47.8
           cache: true
       - name: Mobile — dépendances
         working-directory: mobile

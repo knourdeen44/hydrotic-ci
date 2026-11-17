@@ -43,7 +43,7 @@ def test_forte_pluie_prevue_demain(client, monkeypatch, base):
     monkeypatch.setattr(pluie, "_interroger", lambda _lat, _lon: [
         (aujourdhui + timedelta(days=d), pluies.get(aujourdhui + timedelta(days=d), 0.0)) for d in range(-4, 3)])
 
-    r = client.get("/api/zones/palmeraie/risque").json()
+    r = client.get("/api/zones/treichville/risque").json()
     assert r["demain"] == "orange"  # plafonné : le rouge attend un agent
     assert r["rougeAValider"] is True
     assert r["sources"]["calcul"]["demain"]["probabilite"] == 0.95
@@ -53,7 +53,7 @@ def test_forte_pluie_prevue_demain(client, monkeypatch, base):
            ON CONFLICT (id) DO UPDATE SET role = 'AGENT'""")
     base.commit()
     t = client.get("/api/agent/tableau", headers={"Authorization": f"Bearer {jeton('user_moteur')}"})
-    assert "palmeraie" in t.json()["zonesEnAlerte"]["rougeAValider"]
+    assert "treichville" in t.json()["zonesEnAlerte"]["rougeAValider"]
 
 
 def test_signalements_confirmes_dans_l_heure(client, base):
