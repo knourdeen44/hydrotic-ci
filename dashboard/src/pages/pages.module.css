@@ -85,3 +85,9 @@
   font-size: var(--text-dash-small-size);
   font-weight: 700;
 }
+
+.etatOk {
+  composes: etat;
+  background: color-mix(in srgb, var(--color-risk-vert) 15%, transparent);
+  color: var(--color-slate-dark);
+}

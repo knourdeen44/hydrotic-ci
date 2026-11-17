@@ -62,12 +62,20 @@ export interface UserRepository {
   changerRole(id: string, role: Role, service: string | null): Promise<void>
 }
 
+export interface EtatService {
+  service: string
+  etat: string
+  ok: boolean
+}
+
 export interface DashboardRepository {
   entete(): Promise<EnteteDashboard>
   kpis(): Promise<Kpi[]>
   menu(): Promise<EntreeMenu[]>
   /** Signalements affichés sur la carte schématique du tableau de bord. */
   signalementsCarte(): Promise<PointSvg[]>
+  /** D8 : état réel des services (null en mode démo : rien n'est branché). */
+  supervision(): Promise<EtatService[] | null>
 }
 
 export interface Repositories {

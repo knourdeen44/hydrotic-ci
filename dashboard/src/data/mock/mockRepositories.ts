@@ -99,6 +99,7 @@ export function createMockRepositories(): Repositories {
       kpis: async () => dashboardJson.kpis,
       menu: async () => dashboardJson.menu,
       signalementsCarte: async () => dashboardJson.signalementsCarte,
+      supervision: async () => null,
     },
   }
 }

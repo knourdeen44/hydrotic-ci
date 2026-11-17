@@ -128,6 +128,26 @@ export function createApiRepositories(): Repositories {
         void (await api(`/api/admin/utilisateurs/${id}`, { methode: 'PATCH', corps: { role, service } })),
     },
     dashboard: {
+      supervision: async () => {
+        const [sante, pluie, risque] = await Promise.allSettled([
+          api<{ statut: string; zones: number }>('/api/sante'),
+          api<{ source: string; majLe: string }>('/api/zones/treichville/pluie'),
+          api<{ sources: { calcul: { version: string } | null } }>('/api/zones/treichville/risque'),
+        ])
+        const calcul = risque.status === 'fulfilled' ? risque.value.sources.calcul : null
+        return [
+          pluie.status === 'fulfilled'
+            ? { service: fr.supervision[0], etat: fr.collecteOk(pluie.value.source, depuis(pluie.value.majLe)), ok: true }
+            : { service: fr.supervision[0], etat: fr.collectePanne, ok: false },
+          calcul
+            ? { service: fr.supervision[1], etat: fr.modeleOk(calcul.version), ok: true }
+            : { service: fr.supervision[1], etat: fr.modelePanne, ok: false },
+          { service: fr.supervision[2], etat: fr.envoiAVenir, ok: false },
+          sante.status === 'fulfilled'
+            ? { service: fr.serveur, etat: fr.serveurOk(sante.value.zones), ok: true }
+            : { service: fr.serveur, etat: fr.serveurPanne, ok: false },
+        ]
+      },
       entete: async () => {
         const t = await tableau()
         return {
