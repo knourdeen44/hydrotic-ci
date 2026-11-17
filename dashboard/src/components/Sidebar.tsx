@@ -43,7 +43,7 @@ export default function Sidebar() {
             className={({ isActive }) => `${styles.it} ${isActive ? styles.on : ''}`}
           >
             {entree.libelle}
-            {badge !== undefined && <span className={styles.badge}>{badge}</span>}
+            {!!badge && <span className={styles.badge}>{badge}</span>}
           </NavLink>
         )
       })}
