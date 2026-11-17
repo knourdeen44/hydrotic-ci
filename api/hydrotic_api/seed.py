@@ -1,10 +1,15 @@
 """Données de départ : reprend les fixtures de la phase 1 (fixtures/*.json).
 
 Idempotent (on peut le relancer). Les dates relatives (« il y a 38 min », aujourd'hui, demain)
-sont recalculées à partir de maintenant. Usage : uv run python -m hydrotic_api.seed
+sont recalculées à partir de maintenant.
+
+Référentiel seul (quartiers, niveaux, consignes, modèles de message) : uv run python -m hydrotic_api.seed
+Avec les exemples de la phase 1 (alertes, signalements, SOS, niveaux) : … seed --exemples
+Retirer ces exemples d'une base réelle : … seed --retirer-exemples
 """
 import json
 import re
+import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -38,7 +43,7 @@ def anciennete(texte: str) -> timedelta:
     return timedelta(minutes=int(nombre)) if unite == "min" else timedelta(hours=int(nombre))
 
 
-def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
+def peupler(conn: psycopg.Connection, aujourdhui: date | None = None, exemples: bool = True) -> None:
     aujourdhui = aujourdhui or datetime.now(timezone.utc).date()
     maintenant = datetime.now(timezone.utc)
     zones, risk, alerts = _lire("zones"), _lire("risk"), _lire("alerts")
@@ -69,6 +74,16 @@ def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
                    ON CONFLICT (niveau, rang) DO UPDATE SET texte = EXCLUDED.texte""",
                 (niveau, rang, texte),
             )
+    for cle, texte in alerts["modeles"].items():
+        conn.execute(
+            "INSERT INTO modele_message (cle, texte) VALUES (%s, %s) ON CONFLICT (cle) DO UPDATE SET texte = EXCLUDED.texte",
+            (cle, texte),
+        )
+    if not exemples:
+        _geometries_osm(conn)
+        conn.commit()
+        return
+
     for zone_id, r in risk["parZone"].items():
         for decalage, niveau in ((0, r["aujourdhui"]), (1, r["demain"])):
             conn.execute(
@@ -77,11 +92,6 @@ def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
                 (zone_id, aujourdhui + timedelta(days=decalage), niveau),
             )
 
-    for cle, texte in alerts["modeles"].items():
-        conn.execute(
-            "INSERT INTO modele_message (cle, texte) VALUES (%s, %s) ON CONFLICT (cle) DO UPDATE SET texte = EXCLUDED.texte",
-            (cle, texte),
-        )
     for a in alerts["alertes"]:
         conn.execute(
             """INSERT INTO alerte (id, zone_id, niveau, titre, corps, statut, probabilite, signalements_confirmes,
@@ -112,6 +122,22 @@ def peupler(conn: psycopg.Connection, aujourdhui: date | None = None) -> None:
     conn.commit()
 
 
+def retirer_exemples(conn: psycopg.Connection) -> dict[str, int]:
+    """Supprime les exemples de la phase 1 ; les données saisies par de vrais comptes restent."""
+    alertes = [a["id"] for a in _lire("alerts")["alertes"]]
+    signalements = [s["id"] for s in _lire("reports")["signalements"]]
+    sos = [f"sos-{i}" for i in range(1, len(_lire("sos")["liste"]) + 1)]
+    supprimes = {
+        "alertes": conn.execute("DELETE FROM alerte WHERE id = ANY(%s)", (alertes,)).rowcount,
+        "signalements": conn.execute("DELETE FROM signalement WHERE id = ANY(%s)", (signalements,)).rowcount,
+        "sos": conn.execute("DELETE FROM sos WHERE id = ANY(%s)", (sos,)).rowcount,
+        # Niveaux d'exemple : jamais saisis par un agent connecté.
+        "niveaux": conn.execute("DELETE FROM prevision WHERE maj_par IS NULL").rowcount,
+    }
+    conn.commit()
+    return supprimes
+
+
 def _geometries_osm(conn: psycopg.Connection) -> None:
     """Contours, tronçon et positions réels (OpenStreetMap, outils/importer_osm.py)."""
     requetes = {
@@ -127,5 +153,8 @@ def _geometries_osm(conn: psycopg.Connection) -> None:
 
 if __name__ == "__main__":
     with connexion() as c:
-        peupler(c)
-    print("Données de départ chargées.")
+        if "--retirer-exemples" in sys.argv:
+            print("Exemples supprimés :", retirer_exemples(c))
+        else:
+            peupler(c, exemples="--exemples" in sys.argv)
+            print("Données de départ chargées.")

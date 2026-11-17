@@ -47,7 +47,10 @@ Migrations et données de départ (reprises de `fixtures/`, idempotentes) :
 
 ```bash
 uv run --env-file .env.local python -m hydrotic_api.migrate   # avec DATABASE_URL = connexion directe
-uv run --env-file .env.local python -m hydrotic_api.seed
+uv run --env-file .env.local python -m hydrotic_api.seed   # référentiel seul (production)
 ```
+
+`--exemples` ajoute les alertes, signalements, SOS et niveaux de la phase 1 ; `--retirer-exemples` les supprime
+d'une base réelle (les données des vrais comptes restent).
 
 Déploiement : `vercel deploy --prod` depuis `api/`.
